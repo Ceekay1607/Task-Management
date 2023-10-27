@@ -13,11 +13,13 @@ function methodNotAllowed(req, res, next) {
     }
     return next();
 }
+
 function resourceNotFound(req, res, next) {
     // Handler for unknown URL path.
     // Call next() to pass to the error handling function.
     return next(new ApiError(404, "Resource not found"));
 }
+
 function handleError(error, req, res, next) {
     // The centralized error handling function.
     // In any route handler, calling next(error)
