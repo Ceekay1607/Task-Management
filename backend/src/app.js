@@ -9,8 +9,10 @@ app.use(cors());
 app.use(express.json());
 
 const categoryRouter = require("./routers/category.router");
+const usersRouter = require("./routers/users.router");
 
 app.use("/api/category", categoryRouter);
+app.use("/api/user", usersRouter);
 
 // Handle 404 response
 app.use(resourceNotFound);
