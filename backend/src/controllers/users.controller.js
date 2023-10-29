@@ -60,9 +60,9 @@ async function updateUser(req, res, next) {
         const updated = await usersService.updateUser(req.params.id, req.body);
 
         if (!updated) {
-            return next(new ApiError(404, "Contact not found"));
+            return next(new ApiError(404, "User not found"));
         }
-        return res.send({ message: "Contact was updated successfully" });
+        return res.send({ message: "User was updated successfully" });
     } catch (error) {
         console.log(error);
         return next(
@@ -78,7 +78,7 @@ async function deleteUser(req, res, next) {
         if (!deleted) {
             return next(new ApiError(404, "User not found"));
         }
-        return res.send({ message: "Contact was deleted successfully" });
+        return res.send({ message: "User was deleted successfully" });
     } catch (error) {
         console.log(error);
         return next(
@@ -97,7 +97,7 @@ async function deleteAllUsers(req, res, next) {
     } catch (error) {
         console.log(error);
         return next(
-            new ApiError(500, 'An error occurred while removing all users')
+            new ApiError(500, "An error occurred while removing all users")
         );
     }
 }
