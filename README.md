@@ -16,7 +16,7 @@ npm install
 ```
 3. Apply migrations to set up the database:
 ```c
-npx knex migration:latest
+npx knex migrate:latest
 ```
 4. Seed the database with initial data:
 ```c
