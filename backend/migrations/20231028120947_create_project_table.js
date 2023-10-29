@@ -5,6 +5,11 @@ exports.up = function (knex) {
         table.string("name");
         table.string("description");
         table.string("image");
+        table
+            .foreign("ownerId")
+            .references("id")
+            .inTable("User")
+            .onDelete("CASCADE");
         table.dateTime("createdAt").defaultTo(knex.fn.now());
         table.dateTime("updatedAt").defaultTo(knex.fn.now());
     });

@@ -5,7 +5,6 @@ exports.up = function (knex) {
         table.string("name");
         table.string("email");
         table.string("image");
-        table.string("color");
         table.dateTime("createdAt").defaultTo(knex.fn.now());
         table.dateTime("updatedAt").defaultTo(knex.fn.now());
     });
