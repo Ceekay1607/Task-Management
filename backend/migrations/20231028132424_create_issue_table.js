@@ -2,6 +2,12 @@
 exports.up = function (knex) {
     return knex.schema.createTable("Issue", function (table) {
         table.increments("id").primary();
+        table.integer("projectId").unsigned();
+        table
+            .foreign("projectId")
+            .references("id")
+            .inTable("Project")
+            .onDelete("CASCADE");
         table.integer("categoryId").unsigned();
         table
             .foreign("categoryId")
