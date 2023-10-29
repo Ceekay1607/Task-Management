@@ -1,10 +1,9 @@
 const makeCategoryService = require("../services/category.service");
 const ApiError = require("../api-error");
 
-const categoryService = makeCategoryService();
-
 async function retrieveAllCategory(req, res, next) {
     try {
+        const categoryService = makeCategoryService();
         const categories = await categoryService.retrieveCategories();
         return res.send(categories);
     } catch (e) {
@@ -17,6 +16,7 @@ async function retrieveAllCategory(req, res, next) {
 
 async function retrieveCategory(req, res, next) {
     try {
+        const categoryService = makeCategoryService();
         const category = await categoryService.retrieveCategoryById(
             req.params.id
         );
