@@ -5,6 +5,7 @@ exports.up = function (knex) {
         table.string("name");
         table.string("description");
         table.string("image");
+        table.integer("ownerId").unsigned();
         table
             .foreign("ownerId")
             .references("id")
