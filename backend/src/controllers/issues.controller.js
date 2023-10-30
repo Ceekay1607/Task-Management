@@ -22,25 +22,18 @@ async function createIssue(req, res, next) {
         return res.status(201).json(issue);
     } catch (error) {
         console.error(error);
-        if (error.message === "Project not found") {
-            return next(new ApiError(404, "Project not found"));
-        } else {
-            return next(
-                new ApiError(500, "An error occurred while creating the issue")
-            );
-        }
+        return next(error);
     }
 }
 
 async function retrieveIssue(req, res, next) {
+    const { projectId, number } = req.params;
     try {
         const issuesService = makeIssuesService();
-        const issue = await issuesService.retrieveIssue(req.params.id);
-
-        return res.send(issue);
+        const issue = await issuesService.retrieveIssue(projectId, number);
+        res.json(issue);
     } catch (error) {
-        console.log(error);
-        return next(error);
+        next(error);
     }
 }
 
