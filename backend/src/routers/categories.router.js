@@ -1,8 +1,8 @@
 const express = require("express");
-const categoryController = require("../controllers/category.controller");
+const categoryController = require("../controllers/categories.controller");
 const router = express.Router();
 
-const { methodNotAllowed } = require("../controllers/error");
+const { methodNotAllowed } = require("../controllers/errors");
 
 router
     .route("/")

@@ -2,7 +2,7 @@ const express = require("express");
 const priorityController = require("../controllers/priority.controller");
 const router = express.Router();
 
-const { methodNotAllowed } = require("../controllers/error");
+const { methodNotAllowed } = require("../controllers/errors");
 
 router
     .route("/")

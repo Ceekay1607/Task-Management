@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const app = express();
 
-const { resourceNotFound, handleError } = require("./controllers/error");
+const { resourceNotFound, handleError } = require("./controllers/errors");
 
 app.use(cors());
 app.use(express.json());
