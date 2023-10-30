@@ -12,12 +12,14 @@ const categoryRouter = require("./routers/categories.router");
 const priorityRouter = require("./routers/priorities.router");
 const usersRouter = require("./routers/users.router");
 const projectsRouter = require("./routers/projects.router");
+const issueRouter = require("./routers/issues.router");
 
-//Handle applicaiton response
+// Handle application response
 app.use("/api/category", categoryRouter);
 app.use("/api/priority", priorityRouter);
 app.use("/api/user", usersRouter);
 app.use("/api/project", projectsRouter);
+app.use("/api/project/:projectId/issue", issueRouter);
 
 // Handle 404 response
 app.use(resourceNotFound);
