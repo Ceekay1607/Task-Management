@@ -8,14 +8,16 @@ const { resourceNotFound, handleError } = require("./controllers/errors");
 app.use(cors());
 app.use(express.json());
 
-const categoryRouter = require("./routers/category.router");
-const priorityRouter = require("./routers/priority.router");
+const categoryRouter = require("./routers/categories.router");
+const priorityRouter = require("./routers/priorities.router");
 const usersRouter = require("./routers/users.router");
+const projectsRouter = require("./routers/projects.router");
 
 //Handle applicaiton response
 app.use("/api/category", categoryRouter);
 app.use("/api/priority", priorityRouter);
 app.use("/api/user", usersRouter);
+app.use("/api/project", projectsRouter);
 
 // Handle 404 response
 app.use(resourceNotFound);

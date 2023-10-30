@@ -18,12 +18,12 @@ async function createUser(req, res, next) {
     }
 }
 
-async function getManyUsers(req, res, next) {
+async function retrieveAllUsers(req, res, next) {
     let users = [];
 
     try {
         const usersService = makeUsersService();
-        users = await usersService.getManyUsers(req.query);
+        users = await usersService.retrieveAllUsers(req.query);
     } catch (error) {
         console.log(error);
         return next(
@@ -104,7 +104,7 @@ async function deleteAllUsers(req, res, next) {
 
 module.exports = {
     createUser,
-    getManyUsers,
+    retrieveAllUsers,
     getUserById,
     updateUser,
     deleteUser,

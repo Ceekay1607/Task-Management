@@ -1,4 +1,4 @@
-const makePriorityService = require("../services/priority.service");
+const makePriorityService = require("../services/priorities.service");
 const ApiError = require("../api-error");
 
 async function retrieveAllPriority(req, res, next) {
