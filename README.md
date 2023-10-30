@@ -5,20 +5,20 @@
 ### Installation and Configuration
 1. Create a new database:
 - Before proceeding, ensure you have a local database server running. Create a new database named *task_management* in your local server.
-2. Create a new `.env` file in the backend folder and apply configuration based on the provided `.env.example` file.
-3. Navigate to the `backend` folder:
+2. Navigate to the `backend` folder:
 ```
   cd backend
 ```
-2. Install the required dependencies:
+3. Create a new `.env` file in the backend folder and apply configuration based on the provided `.env.example` file.
+4. Install the required dependencies:
 ```c
 npm install
 ```
-3. Apply migrations to set up the database:
+5. Apply migrations to set up the database:
 ```c
 npx knex migrate:latest
 ```
-4. Seed the database with initial data:
+6. Seed the database with initial data:
 ```c
 npx knex seed:run
 ```
