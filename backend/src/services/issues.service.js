@@ -102,6 +102,16 @@ function makeIssuesService() {
 
     async function retrieveIssue(projectId, number) {
         try {
+            // Check if the project exists
+            const projectExists = await knex("Project")
+                .select("id")
+                .where("id", projectId)
+                .first();
+
+            if (!projectExists) {
+                return new ApiError(404, "Project not found");
+            }
+
             const issue = await knex("Issue")
                 .select(
                     "Issue.id",
@@ -131,7 +141,7 @@ function makeIssuesService() {
                 .first();
 
             if (!issue) {
-                throw new ApiError(404, "Issue not found");
+                return new ApiError(404, "Issue not found");
             }
 
             return issue;
