@@ -33,6 +33,7 @@ async function retrieveIssue(req, res, next) {
         const issue = await issuesService.retrieveIssue(projectId, number);
         res.json(issue);
     } catch (error) {
+        console.error(error);
         return next(error);
     }
 }

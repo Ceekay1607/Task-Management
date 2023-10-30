@@ -44,7 +44,7 @@ function makeIssuesService() {
                 .first();
 
             if (!reporterIsMember) {
-                return new ApiError(
+                throw new ApiError(
                     400,
                     "Reporter is not a member of the project"
                 );
@@ -59,7 +59,7 @@ function makeIssuesService() {
                 .first();
 
             if (!assigneeIsMember) {
-                return new ApiError(
+                throw new ApiError(
                     400,
                     "Assignee is not a member of the project"
                 );
@@ -109,7 +109,7 @@ function makeIssuesService() {
                 .first();
 
             if (!projectExists) {
-                return new ApiError(404, "Project not found");
+                throw new ApiError(404, "Project not found");
             }
 
             const issue = await knex("Issue")
@@ -141,18 +141,33 @@ function makeIssuesService() {
                 .first();
 
             if (!issue) {
-                return new ApiError(404, "Issue not found");
+                throw new ApiError(404, "Issue not found");
             }
 
             return issue;
         } catch (error) {
             console.error(error);
-            throw new ApiError(500, "Internal Server Error");
+            if (error instanceof ApiError) {
+                // Re-throw the ApiError for specific cases
+                throw error;
+            } else {
+                throw new ApiError(500, "Internal Server Error");
+            }
         }
     }
 
     async function retrieveAllIssues(projectId) {
         try {
+            // Check if the project exists
+            const projectExists = await knex("Project")
+                .select("id")
+                .where("id", projectId)
+                .first();
+
+            if (!projectExists) {
+                throw new ApiError(404, "Project not found");
+            }
+
             const issueNumbers = await knex("issue")
                 .select("number")
                 .where("issue.projectId", projectId);
@@ -165,7 +180,14 @@ function makeIssuesService() {
             );
 
             return issues;
-        } catch (error) {}
+        } catch (error) {
+            if (error instanceof ApiError) {
+                // Re-throw the ApiError for specific cases
+                throw error;
+            } else {
+                throw new ApiError(500, "Internal Server Error");
+            }
+        }
     }
 
     async function deleteIssue(projectId, issueNumber) {
@@ -177,7 +199,7 @@ function makeIssuesService() {
                 .first();
 
             if (!projectExists) {
-                return new ApiError(404, "Project not found");
+                throw new ApiError(404, "Project not found");
             }
 
             // Delete the issue
@@ -189,7 +211,7 @@ function makeIssuesService() {
                 .del();
 
             if (deleteCount === 0) {
-                return new ApiError(404, "Issue not found");
+                throw new ApiError(404, "Issue not found");
             }
 
             // Update the issue numbers for remaining issues in the project
