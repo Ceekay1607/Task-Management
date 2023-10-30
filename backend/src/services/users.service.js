@@ -21,7 +21,7 @@ function makeUsersService() {
         return { id, ...user };
     }
 
-    async function getManyUsers(query) {
+    async function retrieveAllUsers(query) {
         const { name } = query;
         let result = await knex("user")
             .where((builder) => {
@@ -60,7 +60,7 @@ function makeUsersService() {
 
     return {
         createUser,
-        getManyUsers,
+        retrieveAllUsers,
         getUserById,
         updateUser,
         deleteUser,

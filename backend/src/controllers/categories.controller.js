@@ -1,4 +1,4 @@
-const makeCategoryService = require("../services/category.service");
+const makeCategoryService = require("../services/categories.service");
 const ApiError = require("../api-error");
 
 async function retrieveAllCategory(req, res, next) {

@@ -1,5 +1,5 @@
 const express = require("express");
-const priorityController = require("../controllers/priority.controller");
+const priorityController = require("../controllers/priorities.controller");
 const router = express.Router();
 
 const { methodNotAllowed } = require("../controllers/errors");
