@@ -2,13 +2,14 @@
 exports.up = function (knex) {
     return knex.schema.createTable("Issue", function (table) {
         table.increments("id").primary();
+        table.integer("number");
         table.integer("projectId").unsigned();
         table
             .foreign("projectId")
             .references("id")
             .inTable("Project")
             .onDelete("CASCADE");
-        table.integer("categoryId").unsigned();
+        table.integer("categoryId").unsigned().defaultTo(1); // Set default value to 1
         table
             .foreign("categoryId")
             .references("id")
@@ -28,7 +29,7 @@ exports.up = function (knex) {
             .references("id")
             .inTable("User")
             .onDelete("CASCADE");
-        table.integer("priorityId").unsigned().nullable();
+        table.integer("priorityId").unsigned().defaultTo(1); // Set default value to 1
         table.dateTime("createdAt").defaultTo(knex.fn.now());
         table.dateTime("updatedAt").defaultTo(knex.fn.now());
 
