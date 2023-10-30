@@ -21,33 +21,50 @@ function makeIssuesService() {
     }
 
     async function createIssue(payload) {
-        const issue = readIssue(payload);
-
-        const projectExists = await knex("Project")
-            .select("id")
-            .where("id", payload.projectId)
-            .first();
-
-        if (!projectExists) {
-            throw new Error("Project not found");
-        }
-
         try {
-            // Insert into Issue table
-            const [newIssueId] = await knex("Issue")
-                .insert(issue)
-                .returning("id");
+            const issue = readIssue(payload);
+            const projectId = payload.projectId;
 
-            // Respond with the created issue
-            return { newIssueId, ...issue };
+            // Check if the project exists
+            const projectExists = await knex("Project")
+                .select("id")
+                .where("id", projectId)
+                .first();
+
+            if (!projectExists) {
+                throw new ApiError(404, "Project not found");
+            }
+
+            // Get the maximum issue number for the given project
+            const maxIssueNumber = await knex("Issue")
+                .max("number as maxIssueNumber")
+                .where("projectId", projectId)
+                .first();
+
+            // Calculate the next issue number
+            const nextIssueNumber = (maxIssueNumber.maxIssueNumber || 0) + 1;
+
+            // Insert into Issue table with the calculated issue number
+            const [newIssueId] = await knex("Issue").insert({
+                projectId,
+                number: nextIssueNumber,
+                ...issue,
+            });
+
+            // Retrieve the created issue
+            const createdIssue = {
+                id: newIssueId,
+                number: nextIssueNumber,
+                ...issue,
+            };
+
+            return createdIssue;
         } catch (error) {
-            if (error.message === "Project not found") {
-                // Handle project not found error
-                console.error("Project not found");
-                throw new Error("Project not found");
+            console.error(error);
+            if (error instanceof ApiError) {
+                // Re-throw the ApiError for specific cases
+                throw error;
             } else {
-                // Handle other errors
-                console.error(error);
                 throw new Error("Internal Server Error");
             }
         }
