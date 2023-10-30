@@ -2,6 +2,21 @@ const ApiError = require("../api-error");
 const knex = require("../database/knex");
 
 function makeProjectsService() {
+    function readProject(payload) {
+        const project = {
+            name: payload.name,
+            description: payload.description,
+            image: payload.image,
+            ownerId: payload.ownerId,
+        };
+
+        Object.keys(project).forEach(
+            (key) => project[key] === undefined && delete project[key]
+        );
+
+        return project;
+    }
+
     /**
      * Create a new project
      *
@@ -9,16 +24,12 @@ function makeProjectsService() {
      * @returns
      */
     async function createProject(payload) {
-        const { name, description, image, ownerId, memberIds } = payload;
+        const project = readProject(payload);
+        const memberIds = payload.memberIds;
 
         try {
             // Insert into Project table
-            const [projectId] = await knex("Project").insert({
-                name,
-                description,
-                image,
-                ownerId,
-            });
+            const [projectId] = await knex("Project").insert(project);
 
             // Insert into ProjectUser junction table
             if (memberIds && Array.isArray(memberIds) && memberIds.length > 0) {
@@ -29,24 +40,10 @@ function makeProjectsService() {
                 await knex("ProjectUser").insert(projectUserInsert);
             }
 
-            // Retrieve the created project with owner and members
-            const createdProject = await knex("Project")
-                .select(
-                    "Project.id",
-                    "Project.name",
-                    "Project.description",
-                    "Project.image",
-                    "Project.ownerId as ownerId",
-                    "User.name as ownerName",
-                    "Project.createdAt",
-                    "Project.updatedAt"
-                )
-                .leftJoin("User", "Project.ownerId", "User.id")
-                .where("Project.id", projectId)
-                .first();
+            project.memberIds = memberIds;
 
             // Respond with the created project
-            return createdProject;
+            return { projectId, ...project };
         } catch (error) {
             console.error(error);
             // Rethrow the error or handle it accordingly
@@ -64,16 +61,7 @@ function makeProjectsService() {
         try {
             // Retrieve the project with owner and members
             const project = await knex("Project")
-                .select(
-                    "Project.id",
-                    "Project.name", // Specify the table name or alias for the 'name' column
-                    "Project.description",
-                    "Project.image",
-                    "Project.ownerId as ownerId",
-                    "User.name as ownerName",
-                    "Project.createdAt",
-                    "Project.updatedAt"
-                )
+                .select("*")
                 .leftJoin("User", "Project.ownerId", "User.id")
                 .where("Project.id", projectId)
                 .first();
@@ -91,6 +79,14 @@ function makeProjectsService() {
             // Add the 'members' property to the project
             project.members = members;
 
+            // Retrieve issues associated with the project
+            const issues = await knex("Issue")
+                .select("*")
+                .where("projectId", projectId);
+
+            // Add the 'issues' property to each project
+            project.issues = issues;
+
             return project;
         } catch (error) {
             console.error(error);
@@ -100,39 +96,50 @@ function makeProjectsService() {
     }
 
     /**
-     * Retrieve projects by
+     * Retrieve all projects with members and issues
      *
      * @returns
      */
     async function retrieveAllProjects() {
         try {
-            // Retrieve all projects with owner details
-            const projects = await knex("Project")
-                .select(
-                    "Project.id",
-                    "Project.name", // Specify the table name or alias for the 'name' column
-                    "Project.description",
-                    "Project.image",
-                    "Project.ownerId as ownerId",
-                    "User.name as ownerName",
-                    "Project.createdAt",
-                    "Project.updatedAt"
-                )
-                .leftJoin("User", "Project.ownerId", "User.id");
+            // Retrieve unique project IDs
+            const projectIds = await knex("Project").select("id");
 
-            // Retrieve members for each project
+            // Retrieve members and issues for each project
             const projectsWithMembers = await Promise.all(
-                projects.map(async (project) => {
-                    const members = await knex("ProjectUser")
+                projectIds.map(async ({ id }) => {
+                    // Retrieve project details
+                    const project = await knex("Project as P")
                         .select(
-                            "User.id as memberId",
-                            "User.name as memberName"
+                            "P.id as projectId",
+                            "P.name as projectName",
+                            "P.description as projectDescription",
+                            "P.image as projectImage",
+                            "P.ownerId as projectOwnerId",
+                            "U.name as ownerName",
+                            "P.createdAt as projectCreatedAt",
+                            "P.updatedAt as projectUpdatedAt"
                         )
-                        .leftJoin("User", "ProjectUser.userId", "User.id")
-                        .where("ProjectUser.projectId", project.id);
+                        .leftJoin("User as U", "P.ownerId", "U.id")
+                        .where("P.id", id)
+                        .first();
 
-                    // Add the 'members' property to each project
+                    // Retrieve members associated with the project
+                    const members = await knex("ProjectUser as PU")
+                        .select("U.id as memberId", "U.name as memberName")
+                        .leftJoin("User as U", "PU.userId", "U.id")
+                        .where("PU.projectId", id);
+
+                    // Add the 'members' property to the project
                     project.members = members;
+
+                    // Retrieve issues associated with the project
+                    const issues = await knex("Issue")
+                        .select("*")
+                        .where("projectId", id);
+
+                    // Add the 'issues' property to the project
+                    project.issues = issues;
 
                     return project;
                 })
