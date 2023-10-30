@@ -27,6 +27,8 @@ function makeProjectsService() {
         const project = readProject(payload);
         const memberIds = payload.memberIds;
 
+        memberIds.push(payload.ownerId);
+
         try {
             // Insert into Project table
             const [projectId] = await knex("Project").insert(project);
