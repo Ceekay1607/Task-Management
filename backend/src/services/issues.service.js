@@ -32,7 +32,7 @@ function makeIssuesService() {
                 .first();
 
             if (!projectExists) {
-                throw new ApiError(404, "Project not found");
+                return new ApiError(404, "Project not found");
             }
 
             // Check if reporterId is a member of the project
@@ -44,7 +44,7 @@ function makeIssuesService() {
                 .first();
 
             if (!reporterIsMember) {
-                throw new ApiError(
+                return new ApiError(
                     400,
                     "Reporter is not a member of the project"
                 );
@@ -59,7 +59,7 @@ function makeIssuesService() {
                 .first();
 
             if (!assigneeIsMember) {
-                throw new ApiError(
+                return new ApiError(
                     400,
                     "Assignee is not a member of the project"
                 );
@@ -168,7 +168,7 @@ function makeIssuesService() {
         } catch (error) {}
     }
 
-    async function deleteIssue(projectId, number) {
+    async function deleteIssue(projectId, issueNumber) {
         try {
             // Check if the project exists
             const projectExists = await knex("Project")
@@ -177,22 +177,40 @@ function makeIssuesService() {
                 .first();
 
             if (!projectExists) {
-                throw new ApiError(404, "Project not found");
+                return new ApiError(404, "Project not found");
             }
 
-            const deleteCount = await knex("issue")
-                .where("projectId", projectId)
-                .where("number", number)
+            // Delete the issue
+            const deleteCount = await knex("Issue")
+                .where({
+                    projectId: projectId,
+                    number: issueNumber,
+                })
                 .del();
 
             if (deleteCount === 0) {
                 return new ApiError(404, "Issue not found");
             }
 
+            // Update the issue numbers for remaining issues in the project
+            await knex.raw(
+                `
+                UPDATE Issue
+                SET number = number - 1
+                WHERE projectId = ? AND number > ?
+                `,
+                [projectId, issueNumber]
+            );
+
             return { success: true, message: "Issue deleted successfully" };
         } catch (error) {
-            console.log(error);
-            throw new Error("Internal Server Error");
+            console.error(error);
+            if (error instanceof ApiError) {
+                // Re-throw the ApiError for specific cases
+                throw error;
+            } else {
+                throw new ApiError(500, "Internal Server Error");
+            }
         }
     }
 
