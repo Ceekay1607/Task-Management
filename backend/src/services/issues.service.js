@@ -111,13 +111,15 @@ function makeIssuesService() {
         }
     }
 
-    async function retrieveAllIssues() {
+    async function retrieveAllIssues(projectId) {
         try {
-            const issueIds = await knex("issue").select("id");
+            const issueNumbers = await knex("issue")
+                .select("number")
+                .where("issue.projectId", projectId);
 
             const issues = await Promise.all(
-                issueIds.map(async ({ id }) => {
-                    const issue = await retrieveIssue(id);
+                issueNumbers.map(async ({ number }) => {
+                    const issue = await retrieveIssue(projectId, number);
                     return issue;
                 })
             );

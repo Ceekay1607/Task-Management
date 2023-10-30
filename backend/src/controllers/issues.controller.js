@@ -46,7 +46,9 @@ async function retrieveIssue(req, res, next) {
 async function retrieveAllIssues(req, res, next) {
     try {
         const issuesService = makeIssuesService();
-        const issues = await issuesService.retrieveAllIssues();
+        const issues = await issuesService.retrieveAllIssues(
+            req.params.projectId
+        );
 
         return res.send(issues);
     } catch (error) {
