@@ -70,35 +70,44 @@ function makeIssuesService() {
         }
     }
 
-    async function retrieveIssue(issueId) {
+    async function retrieveIssue(projectId, number) {
         try {
-            const issue = await knex("issue")
+            const issue = await knex("Issue")
                 .select(
-                    "issue.id",
-                    "issue.name",
-                    "project.name as projectName",
-                    "category.name as Category",
-                    "priority.name as Priority",
-                    "Reporter.id as reporterId",
-                    "Reporter.name as reporterName",
-                    "Assignee.id as assigneeId",
-                    "Assignee.name as assigneeName"
+                    "Issue.id",
+                    "Issue.number",
+                    "Issue.name",
+                    "Issue.description",
+                    "Category.name as categoryName",
+                    "UserReporter.name as reporterName",
+                    "UserAssignee.name as assigneeName",
+                    "Priority.name as priorityName",
+                    "Issue.createdAt",
+                    "Issue.updatedAt"
                 )
-                .join("Project", "issue.projectId", "project.id")
-                .join("Category", "issue.categoryId", "category.id")
-                .join("Priority", "issue.priorityId", "priority.id")
-                .join("User as Reporter", "issue.reporterId", "Reporter.id")
-                .join("User as Assignee", "issue.assigneeId", "Assignee.id")
-                .where("issue.id", issueId);
+                .leftJoin("Category", "Issue.categoryId", "Category.id")
+                .leftJoin(
+                    "User as UserReporter",
+                    "Issue.reporterId",
+                    "UserReporter.id"
+                )
+                .leftJoin(
+                    "User as UserAssignee",
+                    "Issue.assigneeId",
+                    "UserAssignee.id"
+                )
+                .leftJoin("Priority", "Issue.priorityId", "Priority.id")
+                .where({ "Issue.projectId": projectId, "Issue.number": number })
+                .first();
 
             if (!issue) {
-                return new ApiError(404, "Issue not found");
+                throw new ApiError(404, "Issue not found");
             }
 
             return issue;
         } catch (error) {
-            console.log(error);
-            throw new Error("Internal Server Error");
+            console.error(error);
+            throw new ApiError(500, "Internal Server Error");
         }
     }
 
