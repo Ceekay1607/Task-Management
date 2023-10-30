@@ -1,3 +1,4 @@
+const ApiError = require("../api-error");
 const knex = require("../database/knex");
 
 function makeIssuesService() {
@@ -52,8 +53,47 @@ function makeIssuesService() {
         }
     }
 
+    async function retrieveIssue(issueId) {
+        try {
+            const issue = await knex("issue")
+                .select(
+                    "issue.id",
+                    "issue.name",
+                    "project.name as projectName",
+                    "category.name as Category",
+                    "priority.name as Priority",
+                    "Reporter.id as reporterId",
+                    "Reporter.name as reporterName",
+                    "Assignee.id as assigneeId",
+                    "Assignee.name as assigneeName"
+                )
+                .join("Project", "issue.projectId", "project.id")
+                .join("Category", "issue.categoryId", "category.id")
+                .join("Priority", "issue.priorityId", "priority.id")
+                .join("User as Reporter", "issue.reporterId", "Reporter.id")
+                .join("User as Assignee", "issue.assigneeId", "Assignee.id")
+                .where("issue.id", issueId);
+
+            if (!issue) {
+                return new ApiError(404, "Issue not found");
+            }
+
+            return issue;
+        } catch (error) {
+            console.log(error);
+            throw new Error("Internal Server Error");
+        }
+    }
+
+    // async function retrieveAllIssues() {
+    //     try{
+    //         const
+    //     }
+    // }
+
     return {
         createIssue,
+        retrieveIssue,
     };
 }
 

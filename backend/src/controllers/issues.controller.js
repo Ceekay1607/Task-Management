@@ -32,6 +32,19 @@ async function createIssue(req, res, next) {
     }
 }
 
+async function retrieveIssue(req, res, next) {
+    try {
+        const issuesService = makeIssuesService();
+        const issue = await issuesService.retrieveIssue(req.params.id);
+
+        return res.send(issue);
+    } catch (error) {
+        console.log(error);
+        return next(error);
+    }
+}
+
 module.exports = {
     createIssue,
+    retrieveIssue,
 };
