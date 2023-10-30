@@ -33,14 +33,13 @@ async function createIssue(req, res, next) {
 }
 
 async function retrieveIssue(req, res, next) {
+    const { projectId, number } = req.params;
     try {
         const issuesService = makeIssuesService();
-        const issue = await issuesService.retrieveIssue(req.params.id);
-
-        return res.send(issue);
+        const issue = await issuesService.retrieveIssue(projectId, number);
+        res.json(issue);
     } catch (error) {
-        console.log(error);
-        return next(error);
+        next(error);
     }
 }
 
