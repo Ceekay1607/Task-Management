@@ -9,12 +9,11 @@ async function createProject(req, res, next) {
     try {
         const projectsService = makeProjectsService();
         const project = await projectsService.createProject(req.body);
-        return res.send();
-    } catch (error) {
-        console.log(error);
-        return next(
-            new ApiError(500, "An error occurred while creating the project")
-        );
+
+        return res.send(project);
+    } catch (e) {
+        console.log(e);
+        return next(e);
     }
 }
 
@@ -22,12 +21,11 @@ async function retrieveProject(req, res, next) {
     try {
         const projectsService = makeProjectsService();
         const project = await projectsService.retrieveProject(req.params.id);
+
         return res.send(project);
     } catch (e) {
         console.log(e);
-        return next(
-            new ApiError(500, "An error occurred while retrieving the project")
-        );
+        return next(e);
     }
 }
 
@@ -35,12 +33,23 @@ async function retrieveAllProjects(req, res, next) {
     try {
         const projectsService = makeProjectsService();
         const project = await projectsService.retrieveAllProjects();
+
         return res.send(project);
     } catch (e) {
         console.log(e);
-        return next(
-            new ApiError(500, "An error occurred while retrieving the project")
-        );
+        return next(e);
+    }
+}
+
+async function deleteProject(req, res, next) {
+    try {
+        const projectsService = makeProjectsService();
+        const project = await projectsService.deleteProject(req.params.id);
+
+        return res.send(project);
+    } catch (e) {
+        console.log(e);
+        return next(e);
     }
 }
 
@@ -48,4 +57,5 @@ module.exports = {
     createProject,
     retrieveProject,
     retrieveAllProjects,
+    deleteProject,
 };

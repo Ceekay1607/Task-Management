@@ -1,3 +1,4 @@
+const ApiError = require("../api-error");
 const knex = require("../database/knex");
 
 function makeProjectsService() {
@@ -78,7 +79,7 @@ function makeProjectsService() {
                 .first();
 
             if (!project) {
-                throw new Error("Project not found");
+                return new ApiError(404, "Project not found");
             }
 
             // Retrieve members associated with the project
@@ -141,6 +142,35 @@ function makeProjectsService() {
         } catch (error) {
             console.error(error);
             // Rethrow the error or handle it accordingly
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
+
+    /**
+     * Delete project by ID
+     *
+     * @param {*} projectId
+     * @returns
+     */
+    async function deleteProject(projectId) {
+        try {
+            // Delete project from Project table
+            const deleteCount = await knex("Project")
+                .where("id", projectId)
+                .del();
+
+            if (deleteCount === 0) {
+                // If no project was deleted, throw an error
+                return new ApiError(404, "Project not found");
+            }
+
+            // Delete project-user relationships from ProjectUser table
+            await knex("ProjectUser").where("projectId", projectId).del();
+
+            return { success: true, message: "Project deleted successfully" };
+        } catch (error) {
+            console.error(error);
+            // Rethrow the error or handle it accordingly
             throw new Error("Internal Server Error");
         }
     }
@@ -149,6 +179,7 @@ function makeProjectsService() {
         createProject,
         retrieveProject,
         retrieveAllProjects,
+        deleteProject,
     };
 }
 
