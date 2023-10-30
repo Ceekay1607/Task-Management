@@ -44,7 +44,33 @@ async function retrieveIssue(req, res, next) {
     }
 }
 
+async function retrieveAllIssues(req, res, next) {
+    try {
+        const issuesService = makeIssuesService();
+        const issues = await issuesService.retrieveAllIssues();
+
+        return res.send(issues);
+    } catch (error) {
+        console.log(error);
+        return next(e);
+    }
+}
+
+async function deleteIssue(req, res, next) {
+    try {
+        const issuesService = makeIssuesService();
+        const issue = await issuesService.deleteIssue(req.params.id);
+
+        return res.send(issue);
+    } catch (error) {
+        console.log(error);
+        return next(e);
+    }
+}
+
 module.exports = {
     createIssue,
     retrieveIssue,
+    retrieveAllIssues,
+    deleteIssue,
 };

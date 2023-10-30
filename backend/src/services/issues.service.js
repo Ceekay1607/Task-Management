@@ -87,21 +87,39 @@ function makeIssuesService() {
 
     async function retrieveAllIssues() {
         try {
-            const issueId = await knex("issue").select("id");
+            const issueIds = await knex("issue").select("id");
 
-            const issues = issueId.map(async ({ id }) => {
-                const result = await retrieveIssue(id);
-                return result;
-            });
+            const issues = await Promise.all(
+                issueIds.map(async ({ id }) => {
+                    const issue = await retrieveIssue(id);
+                    return issue;
+                })
+            );
 
             return issues;
         } catch (error) {}
+    }
+
+    async function deleteIssue(id) {
+        try {
+            const deleteCount = await knex("issue").where("id", id).del();
+
+            if (deleteCount === 0) {
+                return new ApiError(404, "Issue not found");
+            }
+
+            return { success: true, message: "Issue deleted successfully" };
+        } catch (error) {
+            console.log(error);
+            throw new Error("Internal Server Error");
+        }
     }
 
     return {
         createIssue,
         retrieveIssue,
         retrieveAllIssues,
+        deleteIssue,
     };
 }
 
