@@ -85,15 +85,23 @@ function makeIssuesService() {
         }
     }
 
-    // async function retrieveAllIssues() {
-    //     try{
-    //         const
-    //     }
-    // }
+    async function retrieveAllIssues() {
+        try {
+            const issueId = await knex("issue").select("id");
+
+            const issues = issueId.map(async ({ id }) => {
+                const result = await retrieveIssue(id);
+                return result;
+            });
+
+            return issues;
+        } catch (error) {}
+    }
 
     return {
         createIssue,
         retrieveIssue,
+        retrieveAllIssues,
     };
 }
 
