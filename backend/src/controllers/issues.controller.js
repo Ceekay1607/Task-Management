@@ -22,13 +22,7 @@ async function createIssue(req, res, next) {
         return res.status(201).json(issue);
     } catch (error) {
         console.error(error);
-        if (error.message === "Project not found") {
-            return next(new ApiError(404, "Project not found"));
-        } else {
-            return next(
-                new ApiError(500, "An error occurred while creating the issue")
-            );
-        }
+        return next(error);
     }
 }
 

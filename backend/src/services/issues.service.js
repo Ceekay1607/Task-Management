@@ -35,6 +35,36 @@ function makeIssuesService() {
                 throw new ApiError(404, "Project not found");
             }
 
+            // Check if reporterId is a member of the project
+            const reporterIsMember = await knex("ProjectUser")
+                .where({
+                    projectId: projectId,
+                    userId: issue.reporterId,
+                })
+                .first();
+
+            if (!reporterIsMember) {
+                throw new ApiError(
+                    400,
+                    "Reporter is not a member of the project"
+                );
+            }
+
+            // Check if assigneeId is a member of the project
+            const assigneeIsMember = await knex("ProjectUser")
+                .where({
+                    projectId: projectId,
+                    userId: issue.assigneeId,
+                })
+                .first();
+
+            if (!assigneeIsMember) {
+                throw new ApiError(
+                    400,
+                    "Assignee is not a member of the project"
+                );
+            }
+
             // Get the maximum issue number for the given project
             const maxIssueNumber = await knex("Issue")
                 .max("number as maxIssueNumber")
@@ -65,7 +95,7 @@ function makeIssuesService() {
                 // Re-throw the ApiError for specific cases
                 throw error;
             } else {
-                throw new Error("Internal Server Error");
+                throw new ApiError(500, "Internal Server Error");
             }
         }
     }
