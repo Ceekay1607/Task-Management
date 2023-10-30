@@ -8,6 +8,9 @@ router
     .post(issuesController.createIssue)
     .get(issuesController.retrieveAllIssues);
 
-router.route("/:number").get(issuesController.retrieveIssue);
+router
+    .route("/:number")
+    .get(issuesController.retrieveIssue)
+    .delete(issuesController.deleteIssue);
 
 module.exports = router;

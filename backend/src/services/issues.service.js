@@ -128,9 +128,22 @@ function makeIssuesService() {
         } catch (error) {}
     }
 
-    async function deleteIssue(id) {
+    async function deleteIssue(projectId, number) {
         try {
-            const deleteCount = await knex("issue").where("id", id).del();
+            // Check if the project exists
+            const projectExists = await knex("Project")
+                .select("id")
+                .where("id", projectId)
+                .first();
+
+            if (!projectExists) {
+                throw new ApiError(404, "Project not found");
+            }
+
+            const deleteCount = await knex("issue")
+                .where("projectId", projectId)
+                .where("number", number)
+                .del();
 
             if (deleteCount === 0) {
                 return new ApiError(404, "Issue not found");

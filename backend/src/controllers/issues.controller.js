@@ -39,7 +39,7 @@ async function retrieveIssue(req, res, next) {
         const issue = await issuesService.retrieveIssue(projectId, number);
         res.json(issue);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 }
 
@@ -53,19 +53,20 @@ async function retrieveAllIssues(req, res, next) {
         return res.send(issues);
     } catch (error) {
         console.log(error);
-        return next(e);
+        return next(error);
     }
 }
 
 async function deleteIssue(req, res, next) {
     try {
+        const { projectId, number } = req.params;
         const issuesService = makeIssuesService();
-        const issue = await issuesService.deleteIssue(req.params.id);
+        const issue = await issuesService.deleteIssue(projectId, number);
 
         return res.send(issue);
     } catch (error) {
         console.log(error);
-        return next(e);
+        return next(error);
     }
 }
 
