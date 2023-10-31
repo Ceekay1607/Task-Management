@@ -2,8 +2,12 @@ const makeCommentsService = require("../services/comments.service");
 const ApiError = require("../api-error");
 
 async function createComment(req, res, next) {
-    if (!req.body || !req.body.userId || !req.body.content) {
-        return next(new ApiError(400, "Invalid comment data"));
+    if (!req.body || !req.body.content) {
+        return next(new ApiError(400, "Body cannot be empty"));
+    }
+
+    if (!req.body.userId) {
+        return next(new ApiError(400, "User ID required"));
     }
 
     try {

@@ -40,35 +40,30 @@ function makeCommentsService() {
                 throw new ApiError(404, "Issue not found");
             }
 
-            // check user is a member of the project
-            const reporter = await knex("ProjectUser")
-                .where({
-                    projectId: projectId,
-                    userId: userId,
-                })
-                .first();
-            const assignee = await knex("ProjectUser")
+            // check if user is a member of the project
+            const isMember = await knex("ProjectUser")
                 .where({
                     projectId: projectId,
                     userId: userId,
                 })
                 .first();
 
-            // throw erroe if user is not a member
-            if (!reporter || !assignee) {
+            // throw error if user is not a member
+            if (!isMember) {
                 throw new ApiError(400, "User is not a member of the project");
             }
 
-            // get issueId
-            const issueId = JSON.parse(JSON.stringify(issueIdExists)).id;
+            const issueId = issueIdExists.id;
             payload.issueId = issueId;
 
             // insert a new comment into issue
             const comment = readComment(payload);
             const [newCommentId] = await knex("comment").insert(comment);
 
-            // respond with the created comment
-            return { newCommentId, ...comment };
+            return {
+                message: "comment created successfully",
+                content: payload.content,
+            };
         } catch (error) {
             console.log(error);
             if (error instanceof ApiError) {
