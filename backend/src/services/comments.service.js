@@ -31,31 +31,27 @@ function makeCommentsService() {
                 throw new ApiError(404, "Issue not found");
             }
 
-            const reporter = await knex("ProjectUser")
+            const isMember = await knex("ProjectUser")
                 .where({
                     projectId: projectId,
                     userId: userId,
                 })
                 .first();
 
-            const assignee = await knex("ProjectUser")
-                .where({
-                    projectId: projectId,
-                    userId: userId,
-                })
-                .first();
-
-            if (!reporter || !assignee) {
+            if (!isMember) {
                 throw new ApiError(400, "User is not a member of the project");
             }
 
-            const issueId = JSON.parse(JSON.stringify(issueIdExists)).id;
+            const issueId = issueIdExists.id;
             payload.issueId = issueId;
 
             const comment = readComment(payload);
             const [newCommentId] = await knex("comment").insert(comment);
 
-            return { newCommentId, ...comment };
+            return {
+                message: "comment created successfully",
+                content: payload.content,
+            };
         } catch (error) {
             console.log(error);
             if (error instanceof ApiError) {
