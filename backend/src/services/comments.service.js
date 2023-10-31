@@ -19,6 +19,7 @@ function makeCommentsService() {
     async function createComment(payload) {
         try {
             const projectId = payload.projectId;
+            const userId = payload.userId;
             const issueNumber = payload.issueNumber;
             const issueIdExists = await knex("issue")
                 .select("id")
@@ -28,6 +29,24 @@ function makeCommentsService() {
 
             if (!issueIdExists) {
                 throw new ApiError(404, "Issue not found");
+            }
+
+            const reporter = await knex("ProjectUser")
+                .where({
+                    projectId: projectId,
+                    userId: userId,
+                })
+                .first();
+
+            const assignee = await knex("ProjectUser")
+                .where({
+                    projectId: projectId,
+                    userId: userId,
+                })
+                .first();
+
+            if (!reporter || !assignee) {
+                throw new ApiError(400, "User is not a member of the project");
             }
 
             const issueId = JSON.parse(JSON.stringify(issueIdExists)).id;
