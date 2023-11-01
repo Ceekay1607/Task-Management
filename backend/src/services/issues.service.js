@@ -198,7 +198,18 @@ function makeIssuesService() {
 
             const issues = await Promise.all(
                 issueNumbers.map(async ({ number }) => {
-                    const issue = await retrieveIssue(projectId, number);
+                    const issue = await knex("Issue")
+                        .select(
+                            "User.name as AssigneeName",
+                            "issue.number as Number",
+                            "issue.name as Name",
+                            "issue.description as Description"
+                        )
+                        .leftJoin("User", "Issue.assigneeId", "User.id")
+                        .leftJoin("Project", "Issue.projectId", "Project.id")
+                        .where("issue.number", number)
+                        .where("project.id", projectId);
+
                     return issue;
                 })
             );

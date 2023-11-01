@@ -135,14 +135,6 @@ function makeProjectsService() {
                     // Add the 'members' property to the project
                     project.members = members;
 
-                    // Retrieve issues associated with the project
-                    const issues = await knex("Issue")
-                        .select("*")
-                        .where("projectId", id);
-
-                    // Add the 'issues' property to the project
-                    project.issues = issues;
-
                     return project;
                 })
             );

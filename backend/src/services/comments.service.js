@@ -74,51 +74,44 @@ function makeCommentsService() {
         }
     }
 
-    async function retrieveAllComments(projectId, issueNumber) {
+    async function retrieveAllComments(payload) {
         try {
-            // Check if the project exists
-            const projectExists = await knex("Project")
+            // check exist issue
+            const issueIdExists = await knex("issue")
                 .select("id")
-                .where("id", projectId)
+                .where("projectId", payload.projectId)
+                .where("number", payload.issueNumber)
                 .first();
 
-            if (!projectExists) {
-                throw new ApiError(404, "Project not found");
-            }
-
-            // Retrieve the main issue details
-            const issue = await knex("Issue")
-                .select("Issue.id", "Issue.name")
-                .where({
-                    "Issue.projectId": projectId,
-                    "Issue.number": issueNumber,
-                })
-                .first();
-
-            if (!issue) {
+            // throw error if issue is not exist
+            if (!issueIdExists) {
                 throw new ApiError(404, "Issue not found");
             }
 
-            // Retrieve comments for the issue
-            const comments = await knex("Comment")
+            // get issue Id
+            const issueId = JSON.parse(JSON.stringify(issueIdExists)).id;
+
+            // retrieve all comments with issueId and projectId
+            const comment = await knex("comment")
                 .select(
-                    "Comment.content",
-                    "User.name as userName",
-                    "User.image as userImage",
-                    "Project.name as projectName",
-                    "Issue.name as issueName"
+                    "comment.userId",
+                    "comment.content",
+                    "issue.name",
+                    "project.name"
                 )
-                .leftJoin("User", "Comment.userId", "User.id")
-                .leftJoin("Issue", "Comment.issueId", "Issue.id")
-                .leftJoin("Project", "Issue.projectId", "Project.id")
-                .where("Comment.issueId", issue.id);
+                .leftJoin("issue", "comment.issueId", "issue.id")
+                .leftJoin("project", "issue.projectId", "project.id")
+                .where("comment.issueId", issueId)
+                .where("issue.projectId", payload.projectId);
 
-            // Attach comments to the issue object
-            issue.comments = comments;
+            // throw error if no comment is exist in issue
+            if (comment.length <= 0) {
+                throw new ApiError(404, "Comment not found");
+            }
 
-            return issue;
+            return comment;
         } catch (error) {
-            console.error(error);
+            console.log(error);
             if (error instanceof ApiError) {
                 throw error;
             } else {
