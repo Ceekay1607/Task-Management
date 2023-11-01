@@ -29,13 +29,12 @@ async function createComment(req, res, next) {
 
 async function retrieveAllComments(req, res, next) {
     try {
-        const projectId = req.params.projectId;
-        const issueNumber = req.params.issueNumber;
+        const { projectId, issueNumber } = req.params;
         const commentsService = makeCommentsService();
-        const comments = await commentsService.retrieveAllComments({
+        const comments = await commentsService.retrieveAllComments(
             projectId,
-            issueNumber,
-        });
+            issueNumber
+        );
 
         return res.send(comments);
     } catch (error) {

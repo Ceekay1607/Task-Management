@@ -74,47 +74,42 @@ function makeCommentsService() {
         }
     }
 
-    async function retrieveAllComments(payload) {
+    async function retrieveAllComments(projectId, issueNumber) {
         try {
-            // check exist issue
-            const issueIdExists = await knex("issue")
-                .select("id")
-                .where("projectId", payload.projectId)
-                .where("number", payload.issueNumber)
-                .first();
+            const makeIssueService = require("./issues.service");
+            const issueService = makeIssueService();
 
-            // throw error if issue is not exist
-            if (!issueIdExists) {
-                throw new ApiError(404, "Issue not found");
-            }
+            // Check if the issue exists
+            const issue = await issueService.retrieveIssue(
+                projectId,
+                issueNumber
+            );
 
-            // get issue Id
-            const issueId = JSON.parse(JSON.stringify(issueIdExists)).id;
-
-            // retrieve all comments with issueId and projectId
-            const comment = await knex("comment")
+            // Retrieve all comments with issueId and projectId
+            const comments = await knex("Comment")
                 .select(
-                    "comment.userId",
-                    "comment.content",
-                    "issue.name",
-                    "project.name"
+                    "Comment.content",
+                    "User.name as userName",
+                    "User.image as userImage",
+                    "Project.name as projectName",
+                    "Issue.name as issueName"
                 )
-                .leftJoin("issue", "comment.issueId", "issue.id")
-                .leftJoin("project", "issue.projectId", "project.id")
-                .where("comment.issueId", issueId)
-                .where("issue.projectId", payload.projectId);
+                .leftJoin("User", "Comment.userId", "User.id")
+                .leftJoin("Issue", "Comment.issueId", "Issue.id")
+                .leftJoin("Project", "Issue.projectId", "Project.id")
+                .where("Comment.issueId", issue.id);
 
-            // throw error if no comment is exist in issue
-            if (comment.length <= 0) {
-                throw new ApiError(404, "Comment not found");
+            // Throw an error if no comments are found in the issue
+            if (comments.length <= 0) {
+                throw new ApiError(404, "Comments not found");
             }
 
-            return comment;
+            return comments;
         } catch (error) {
-            console.log(error);
             if (error instanceof ApiError) {
                 throw error;
             } else {
+                console.log(error);
                 throw new ApiError(500, "Internal Server Error");
             }
         }

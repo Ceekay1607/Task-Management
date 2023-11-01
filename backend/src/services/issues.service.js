@@ -100,6 +100,13 @@ function makeIssuesService() {
         }
     }
 
+    /**
+     * Get issue by project Id and issue number
+     *
+     * @param {*} projectId
+     * @param {*} number
+     * @returns
+     */
     async function retrieveIssue(projectId, number) {
         try {
             // Check if the project exists
