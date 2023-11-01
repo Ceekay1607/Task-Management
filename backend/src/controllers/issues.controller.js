@@ -65,9 +65,35 @@ async function deleteIssue(req, res, next) {
     }
 }
 
+// Define the controller function
+async function updateIssueController(req, res) {
+    try {
+        const { projectId, number } = req.params;
+        const payload = req.body;
+        const issuesService = makeIssuesService();
+        const updatedIssue = await issuesService.updateIssue(
+            projectId,
+            number,
+            payload
+        );
+
+        res.status(200).json(updatedIssue);
+    } catch (error) {
+        if (error instanceof ApiError) {
+            // Handle specific API errors
+            res.status(error.statusCode).json({ error: error.message });
+        } else {
+            // Handle other errors
+            console.error(error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
+}
+
 module.exports = {
     createIssue,
     retrieveIssue,
     retrieveAllIssues,
     deleteIssue,
+    updateIssueController,
 };

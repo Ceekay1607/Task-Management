@@ -11,6 +11,7 @@ router
 router
     .route("/:number")
     .get(issuesController.retrieveIssue)
-    .delete(issuesController.deleteIssue);
+    .delete(issuesController.deleteIssue)
+    .put(issuesController.updateIssueController);
 
 module.exports = router;

@@ -180,6 +180,12 @@ function makeIssuesService() {
         }
     }
 
+    /**
+     * Retrieve all Issues
+     *
+     * @param {*} projectId
+     * @returns
+     */
     async function retrieveAllIssues(projectId) {
         try {
             // Check if the project exists
@@ -225,6 +231,13 @@ function makeIssuesService() {
         }
     }
 
+    /**
+     * Delete Issue and all related information
+     *
+     * @param {*} projectId
+     * @param {*} issueNumber
+     * @returns
+     */
     async function deleteIssue(projectId, issueNumber) {
         try {
             // Check if the project exists
@@ -271,11 +284,74 @@ function makeIssuesService() {
         }
     }
 
+    async function updateIssue(projectId, number, payload) {
+        try {
+            // Check if the project exists
+            const projectExists = await knex("Project")
+                .select("id")
+                .where("id", projectId)
+                .first();
+
+            if (!projectExists) {
+                throw new ApiError(404, "Project not found");
+            }
+
+            // Check if the issue exists
+            const issue = await knex("Issue")
+                .select("id")
+                .where({ projectId, number })
+                .first();
+
+            if (!issue) {
+                throw new ApiError(404, "Issue not found");
+            }
+
+            // Extract fields to update from the payload
+            const {
+                name,
+                description,
+                categoryId,
+                reporterId,
+                assigneeId,
+                priorityId,
+            } = payload;
+
+            // Prepare the update object with non-null values
+            const updateObject = {};
+            if (name !== undefined) updateObject.name = name;
+            if (description !== undefined)
+                updateObject.description = description;
+            if (categoryId !== undefined) updateObject.categoryId = categoryId;
+            if (reporterId !== undefined) updateObject.reporterId = reporterId;
+            if (assigneeId !== undefined) updateObject.assigneeId = assigneeId;
+            if (priorityId !== undefined) updateObject.priorityId = priorityId;
+
+            // Update the issue
+            await knex("Issue").where({ id: issue.id }).update(updateObject);
+
+            // Retrieve the updated issue
+            const updatedIssue = await knex("Issue")
+                .select("*")
+                .where({ id: issue.id })
+                .first();
+
+            return updatedIssue;
+        } catch (error) {
+            console.error(error);
+            if (error instanceof ApiError) {
+                throw error;
+            } else {
+                throw new ApiError(500, "Internal Server Error");
+            }
+        }
+    }
+
     return {
         createIssue,
         retrieveIssue,
         retrieveAllIssues,
         deleteIssue,
+        updateIssue,
     };
 }
 
