@@ -76,16 +76,30 @@ function makeCommentsService() {
 
     async function retrieveAllComments(projectId, issueNumber) {
         try {
-            const makeIssueService = require("./issues.service");
-            const issueService = makeIssueService();
+            // Check if the project exists
+            const projectExists = await knex("Project")
+                .select("id")
+                .where("id", projectId)
+                .first();
 
-            // Check if the issue exists
-            const issue = await issueService.retrieveIssue(
-                projectId,
-                issueNumber
-            );
+            if (!projectExists) {
+                throw new ApiError(404, "Project not found");
+            }
 
-            // Retrieve all comments with issueId and projectId
+            // Retrieve the main issue details
+            const issue = await knex("Issue")
+                .select("Issue.id", "Issue.name")
+                .where({
+                    "Issue.projectId": projectId,
+                    "Issue.number": issueNumber,
+                })
+                .first();
+
+            if (!issue) {
+                throw new ApiError(404, "Issue not found");
+            }
+
+            // Retrieve comments for the issue
             const comments = await knex("Comment")
                 .select(
                     "Comment.content",
@@ -99,17 +113,15 @@ function makeCommentsService() {
                 .leftJoin("Project", "Issue.projectId", "Project.id")
                 .where("Comment.issueId", issue.id);
 
-            // Throw an error if no comments are found in the issue
-            if (comments.length <= 0) {
-                throw new ApiError(404, "Comments not found");
-            }
+            // Attach comments to the issue object
+            issue.comments = comments;
 
-            return comments;
+            return issue;
         } catch (error) {
+            console.error(error);
             if (error instanceof ApiError) {
                 throw error;
             } else {
-                console.log(error);
                 throw new ApiError(500, "Internal Server Error");
             }
         }

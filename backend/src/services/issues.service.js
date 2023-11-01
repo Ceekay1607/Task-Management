@@ -119,6 +119,7 @@ function makeIssuesService() {
                 throw new ApiError(404, "Project not found");
             }
 
+            // Retrieve the main issue details
             const issue = await knex("Issue")
                 .select(
                     "Issue.id",
@@ -151,11 +152,27 @@ function makeIssuesService() {
                 throw new ApiError(404, "Issue not found");
             }
 
+            // Retrieve comments for the issue
+            const comments = await knex("Comment")
+                .select(
+                    "Comment.content",
+                    "User.name as userName",
+                    "User.image as userImage",
+                    "Project.name as projectName",
+                    "Issue.name as issueName"
+                )
+                .leftJoin("User", "Comment.userId", "User.id")
+                .leftJoin("Issue", "Comment.issueId", "Issue.id")
+                .leftJoin("Project", "Issue.projectId", "Project.id")
+                .where("Comment.issueId", issue.id);
+
+            // Attach comments to the issue object
+            issue.comments = comments;
+
             return issue;
         } catch (error) {
             console.error(error);
             if (error instanceof ApiError) {
-                // Re-throw the ApiError for specific cases
                 throw error;
             } else {
                 throw new ApiError(500, "Internal Server Error");
