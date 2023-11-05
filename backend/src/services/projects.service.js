@@ -102,14 +102,16 @@ function makeProjectsService() {
      *
      * @returns
      */
-    async function retrieveAllProjects() {
+    async function retrieveProjectsBelongToUser(userId) {
         try {
-            // Retrieve unique project IDs
-            const projectIds = await knex("Project").select("id");
+            // Retrieve unique project IDs associated with the user
+            const projectIds = await knex("ProjectUser")
+                .select("projectId")
+                .where("userId", userId);
 
-            // Retrieve members and issues for each project
+            // Retrieve details for each project
             const projectsWithMembers = await Promise.all(
-                projectIds.map(async ({ id }) => {
+                projectIds.map(async ({ projectId }) => {
                     // Retrieve project details
                     const project = await knex("Project as P")
                         .select(
@@ -123,14 +125,14 @@ function makeProjectsService() {
                             "P.updatedAt as projectUpdatedAt"
                         )
                         .leftJoin("User as U", "P.ownerId", "U.id")
-                        .where("P.id", id)
+                        .where("P.id", projectId)
                         .first();
 
                     // Retrieve members associated with the project
                     const members = await knex("ProjectUser as PU")
                         .select("U.id as memberId", "U.name as memberName")
                         .leftJoin("User as U", "PU.userId", "U.id")
-                        .where("PU.projectId", id);
+                        .where("PU.projectId", projectId);
 
                     // Add the 'members' property to the project
                     project.members = members;
@@ -179,7 +181,7 @@ function makeProjectsService() {
     return {
         createProject,
         retrieveProject,
-        retrieveAllProjects,
+        retrieveProjectsBelongToUser,
         deleteProject,
     };
 }

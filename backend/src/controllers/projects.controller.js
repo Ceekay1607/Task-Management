@@ -31,13 +31,32 @@ async function retrieveProject(req, res, next) {
 
 async function retrieveAllProjects(req, res, next) {
     try {
-        const projectsService = makeProjectsService();
-        const project = await projectsService.retrieveAllProjects();
+        // userId is required
+        if (!req.body.userId) {
+            throw new ApiError(400, "Missing userId in the request body");
+        }
 
-        return res.send(project);
-    } catch (e) {
-        console.log(e);
-        return next(e);
+        const userId = req.body.userId;
+
+        const projectsService = makeProjectsService();
+        const projects = await projectsService.retrieveProjectsBelongToUser(
+            userId
+        );
+
+        if (projects.length === 0) {
+            throw new ApiError(404, "No projects found for the specified user");
+        }
+
+        return res.json(projects);
+    } catch (error) {
+        console.error(error);
+
+        return res.status(error.statusCode || 500).json({
+            error: {
+                message: error.message || "Internal Server Error",
+                statusCode: error.statusCode || 500,
+            },
+        });
     }
 }
 
