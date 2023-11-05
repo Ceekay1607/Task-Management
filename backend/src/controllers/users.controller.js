@@ -1,19 +1,37 @@
 const makeUsersService = require("../services/users.service");
+const makeUserAccountService = require("../services/userAccount.service");
 const ApiError = require("../api-error");
 
 async function createUser(req, res, next) {
-    if (!req.body?.name) {
-        return next(new ApiError(400, "Name can not be empty"));
+    if (!req.body?.name || !req.body?.email || !req.body?.password) {
+        return next(
+            new ApiError(400, "Name, email, and password are required")
+        );
     }
 
     try {
         const usersService = makeUsersService();
+
+        // Step 1: Create user
         const user = await usersService.createUser(req.body);
-        return res.send(user);
+
+        // Step 2: Create user account
+        const userAccountService = makeUserAccountService();
+        const userAccount = await userAccountService.createUserAccount({
+            userId: user.id,
+            account: req.body.email,
+            password: req.body.password,
+        });
+
+        // Optionally, you can return both user and user account in the response
+        return res.send({ user, userAccount });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return next(
-            new ApiError(500, "An error occurred while creating the contact")
+            new ApiError(
+                500,
+                "An error occurred while creating the user and user account"
+            )
         );
     }
 }

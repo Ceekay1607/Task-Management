@@ -1,11 +1,12 @@
 const knex = require("../database/knex");
+const { faker } = require("@faker-js/faker");
 
 function makeUsersService() {
     function readUser(payload) {
         const user = {
             name: payload.name,
             email: payload.email,
-            image: payload.image,
+            image: payload?.image ?? faker.image.avatar(),
         };
 
         Object.keys(user).forEach(
