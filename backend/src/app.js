@@ -25,7 +25,7 @@ app.use(passport.session());
 
 //Handle authentication
 const authRouter = require("./routers/auth.router");
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 const categoryRouter = require("./routers/categories.router");
 const priorityRouter = require("./routers/priorities.router");

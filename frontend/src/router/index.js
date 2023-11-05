@@ -8,6 +8,11 @@ const routes = [
         component: Login,
     },
     {
+        path: "/project",
+        name: "project",
+        component: () => import("../views/Project.vue"),
+    },
+    {
         path: "/:pathMatch(.*)*",
         name: "notfound",
         component: () => import("../views/NotFound.vue"),
