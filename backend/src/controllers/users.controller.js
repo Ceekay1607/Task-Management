@@ -19,7 +19,7 @@ async function createUser(req, res, next) {
         const userAccountService = makeUserAccountService();
         const userAccount = await userAccountService.createUserAccount({
             userId: user.id,
-            account: req.body.email,
+            username: req.body.email,
             password: req.body.password,
         });
 

@@ -23,11 +23,14 @@ function makeProjectsService() {
      * @param {*} payload: name, description, image, ownerId, memberIds
      * @returns
      */
-    async function createProject(payload) {
+    async function createProject(payload, ownerId) {
         const project = readProject(payload);
-        const memberIds = payload.memberIds;
+        const memberIds = payload?.memberIds ?? [];
 
-        memberIds.push(payload.ownerId);
+        //set ownerId for user in current session
+        project.ownerId = ownerId;
+
+        memberIds.push(ownerId);
 
         try {
             // Insert into Project table

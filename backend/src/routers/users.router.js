@@ -1,4 +1,5 @@
 const express = require("express");
+const { isAuthenticated } = require("../authMiddleware");
 const usersController = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -11,8 +12,8 @@ router
 
 router
     .route("/:id")
-    .get(usersController.getUserById)
-    .put(usersController.updateUser)
-    .delete(usersController.deleteUser);
+    .get(isAuthenticated, usersController.getUserById)
+    .put(isAuthenticated, usersController.updateUser)
+    .delete(isAuthenticated, usersController.deleteUser);
 
 module.exports = router;

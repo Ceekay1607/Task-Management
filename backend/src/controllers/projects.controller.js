@@ -2,13 +2,18 @@ const makeProjectsService = require("../services/projects.service");
 const ApiError = require("../api-error");
 
 async function createProject(req, res, next) {
-    if (!req.body?.name || !req.body?.memberIds || !req.body?.ownerId) {
-        return next(new ApiError(400, "Body can not be empty"));
+    if (!req.body?.name) {
+        return next(new ApiError(400, "Name and memberIds are required"));
     }
 
     try {
         const projectsService = makeProjectsService();
-        const project = await projectsService.createProject(req.body);
+
+        // Chuyển ownerId từ req.user.id vào hàm createProject
+        const project = await projectsService.createProject(
+            req.body,
+            req.user.id
+        );
 
         return res.send(project);
     } catch (e) {
@@ -31,21 +36,13 @@ async function retrieveProject(req, res, next) {
 
 async function retrieveAllProjects(req, res, next) {
     try {
-        // userId is required
-        if (!req.body.userId) {
-            throw new ApiError(400, "Missing userId in the request body");
-        }
-
-        const userId = req.body.userId;
+        // Take userId in current session
+        const userId = req.user.id;
 
         const projectsService = makeProjectsService();
         const projects = await projectsService.retrieveProjectsBelongToUser(
             userId
         );
-
-        if (projects.length === 0) {
-            throw new ApiError(404, "No projects found for the specified user");
-        }
 
         return res.json(projects);
     } catch (error) {

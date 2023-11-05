@@ -21,7 +21,6 @@ function makeCommentsService() {
      * @param {*} payload: projectId, issueNumber, commentId, content, userId
      * @returns
      */
-
     async function createComment(payload) {
         try {
             const projectId = payload.projectId;
@@ -40,12 +39,10 @@ function makeCommentsService() {
                 throw new ApiError(404, "Issue not found");
             }
 
-            // check if user is a member of the project
-            const isMember = await knex("ProjectUser")
-                .where({
-                    projectId: projectId,
-                    userId: userId,
-                })
+            // Check if the user is a member of the project
+            const isMember = await knex("project_user")
+                .where("projectId", projectId)
+                .where("userId", userId)
                 .first();
 
             // throw error if user is not a member

@@ -6,9 +6,7 @@ async function createComment(req, res, next) {
         return next(new ApiError(400, "Body cannot be empty"));
     }
 
-    if (!req.body.userId) {
-        return next(new ApiError(400, "User ID required"));
-    }
+    const userId = req.user.id;
 
     try {
         const projectId = req.params.projectId;
@@ -17,6 +15,7 @@ async function createComment(req, res, next) {
         const comment = await commentsService.createComment({
             projectId,
             issueNumber,
+            userId,
             ...req.body,
         });
 

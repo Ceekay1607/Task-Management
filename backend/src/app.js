@@ -1,4 +1,8 @@
+require("dotenv").config();
+
 const express = require("express");
+const session = require("express-session");
+const passport = require("./auth");
 const cors = require("cors");
 
 const app = express();
@@ -8,12 +12,28 @@ const { resourceNotFound, handleError } = require("./controllers/errors");
 app.use(cors());
 app.use(express.json());
 
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Handle authentication
+const authRouter = require("./routers/auth.router");
+app.use("/auth", authRouter);
+
 const categoryRouter = require("./routers/categories.router");
 const priorityRouter = require("./routers/priorities.router");
 const usersRouter = require("./routers/users.router");
 const projectsRouter = require("./routers/projects.router");
 const issuesRouter = require("./routers/issues.router");
 const commentsRouter = require("./routers/comments.router");
+const { fa } = require("@faker-js/faker");
 
 // Handle application response
 app.use("/api/category", categoryRouter);

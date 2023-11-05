@@ -8,7 +8,7 @@ exports.up = function (knex) {
             .references("id")
             .inTable("User")
             .onDelete("CASCADE");
-        table.string("account").unique().notNullable();
+        table.string("username").unique().notNullable();
         table.string("password").notNullable();
         table.dateTime("createdAt").defaultTo(knex.fn.now());
         table.dateTime("updatedAt").defaultTo(knex.fn.now());
