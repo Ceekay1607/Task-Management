@@ -30,21 +30,33 @@ function makeProjectsService() {
         //set ownerId for user in current session
         project.ownerId = ownerId;
 
-        memberIds.push(ownerId);
-
         try {
             // Insert into Project table
             const [projectId] = await knex("Project").insert(project);
 
             // Insert into ProjectUser junction table
             if (memberIds && Array.isArray(memberIds) && memberIds.length > 0) {
+                // return error if user is not exist
+                for (let i = 0; i < memberIds.length; i++) {
+                    const member = await knex("user")
+                        .select("id")
+                        .where("user.id", memberIds[i])
+                        .first();
+                    if (!member) return new ApiError(404, "Member not found");
+                    if (member.id === ownerId) memberIds.splice(i, 1);
+                    console.log(typeof member.id);
+                    console.log(typeof ownerId);
+                }
+
+                // check duplicate ownerId
+
                 const projectUserInsert = memberIds.map((userId) => ({
                     projectId,
                     userId,
                 }));
                 await knex("ProjectUser").insert(projectUserInsert);
             }
-
+            memberIds.push(ownerId);
             project.memberIds = memberIds;
 
             // Respond with the created project
