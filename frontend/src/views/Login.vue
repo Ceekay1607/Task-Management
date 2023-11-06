@@ -1,45 +1,109 @@
 <!-- Login.vue -->
+
 <template>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Login</div>
-                    <div class="card-body">
-                        <form @submit.prevent="login">
-                            <div class="mb-3">
-                                <label for="email" class="form-label"
-                                    >Email address</label
-                                >
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div
+                class="row d-flex justify-content-center align-items-center h-100"
+            >
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img
+                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                        class="img-fluid"
+                        alt="Sample image"
+                    />
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    <form @submit.prevent="login">
+                        <div
+                            class="d-flex flex-row align-items-center justify-content-center"
+                        >
+                            <p class="lead fw-normal mb-0 me-3 fs-2 fw-bold">
+                                Login
+                            </p>
+                        </div>
+
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="email"
+                                >Email address</label
+                            >
+                            <input
+                                type="email"
+                                id="email"
+                                class="form-control form-control-lg"
+                                placeholder="Enter a valid email address"
+                                v-model="email"
+                                required
+                            />
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-3">
+                            <label class="form-label" for="password"
+                                >Password</label
+                            >
+                            <input
+                                type="password"
+                                id="password"
+                                class="form-control form-control-lg"
+                                placeholder="Enter password"
+                                v-model="password"
+                                required
+                            />
+                        </div>
+
+                        <div
+                            class="d-flex justify-content-between align-items-center"
+                        >
+                            <!-- Checkbox -->
+                            <div class="form-check mb-0">
                                 <input
-                                    type="email"
-                                    class="form-control"
-                                    id="email"
-                                    v-model="email"
-                                    required
+                                    class="form-check-input me-2"
+                                    type="checkbox"
+                                    value=""
+                                    id="form2Example3"
                                 />
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label"
-                                    >Password</label
+                                <label
+                                    class="form-check-label"
+                                    for="form2Example3"
                                 >
-                                <input
-                                    type="password"
-                                    class="form-control"
-                                    id="password"
-                                    v-model="password"
-                                    required
-                                />
+                                    Remember me
+                                </label>
                             </div>
-                            <button type="submit" class="btn btn-primary">
+                            <a href="#!" class="text-body">Forgot password?</a>
+                        </div>
+
+                        <div class="text-center text-lg-start mt-4 pt-2">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-lg"
+                                style="
+                                    padding-left: 2.5rem;
+                                    padding-right: 2.5rem;
+                                "
+                            >
                                 Login
                             </button>
-                        </form>
-                    </div>
+                            <p class="small fw-bold mt-2 pt-1 mb-0">
+                                Don't have an account?
+                                <a href="#!" class="link-danger">Register</a>
+                            </p>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
+        <div
+            class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary"
+        >
+            <!-- Copyright -->
+            <div class="text-white mb-3 mb-md-0">
+                Copyright © 2020. All rights reserved.
+            </div>
+            <!-- Copyright -->
+        </div>
+    </section>
 </template>
 
 <script>
@@ -72,5 +136,19 @@ export default {
 </script>
 
 <style scoped>
-/* Add any custom styles specific to this component */
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+.h-custom {
+    height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
 </style>
