@@ -18,53 +18,95 @@ function makeProjectsService() {
     }
 
     /**
-     * Create a new project
+     * Create new project
      *
-     * @param {*} payload: name, description, image, ownerId, memberIds
+     * @param {*} payload {name, description, image, ownerId, memberEmails}
      * @returns
      */
-    async function createProject(payload, ownerId) {
+    async function createProject(payload) {
         const project = readProject(payload);
-        const memberIds = payload?.memberIds ?? [];
-
-        //set ownerId for user in current session
-        project.ownerId = ownerId;
+        const ownerEmail = payload.ownerEmail;
+        const ownerId = payload.ownerId;
 
         try {
-            // Insert into Project table
             const [projectId] = await knex("Project").insert(project);
 
-            // Insert into ProjectUser junction table
-            if (memberIds && Array.isArray(memberIds) && memberIds.length > 0) {
-                // return error if user is not exist
-                for (let i = 0; i < memberIds.length; i++) {
-                    const member = await knex("user")
-                        .select("id")
-                        .where("user.id", memberIds[i])
-                        .first();
-                    if (!member) return new ApiError(404, "Member not found");
-                    if (member.id === ownerId) memberIds.splice(i, 1);
-                    console.log(typeof member.id);
-                    console.log(typeof ownerId);
+            // Add owner to the ProjectUser table
+            await knex("ProjectUser").insert({
+                projectId,
+                userId: ownerId,
+            });
+
+            // Check if memberEmails are present in payload
+            if (
+                payload.memberEmails &&
+                Array.isArray(payload.memberEmails) &&
+                payload.memberEmails.length > 0
+            ) {
+                // Check if owner email is in memberEmails
+                const isOwnerIncluded =
+                    payload.memberEmails.includes(ownerEmail);
+
+                if (isOwnerIncluded) {
+                    // Remove owner email from memberEmails to avoid duplication
+                    payload.memberEmails = payload.memberEmails.filter(
+                        (email) => email !== ownerEmail
+                    );
                 }
 
-                // check duplicate ownerId
-
-                const projectUserInsert = memberIds.map((userId) => ({
-                    projectId,
-                    userId,
-                }));
-                await knex("ProjectUser").insert(projectUserInsert);
+                // Add other members to the ProjectUser table
+                await handleProjectMembers(projectId, payload.memberEmails);
             }
-            memberIds.push(ownerId);
-            project.memberIds = memberIds;
 
-            // Respond with the created project
             return { projectId, ...project };
         } catch (error) {
             console.error(error);
-            // Rethrow the error or handle it accordingly
-            throw new Error("Internal Server Error");
+            if (error instanceof ApiError) {
+                // Re-throw the ApiError for specific cases
+                throw error;
+            } else {
+                throw new ApiError(500, "Internal Server Error");
+            }
+        }
+    }
+
+    async function handleProjectMembers(projectId, memberEmails) {
+        const notFoundEmails = [];
+
+        for (const email of memberEmails) {
+            try {
+                const member = await knex("user")
+                    .select("id")
+                    .where("email", email)
+                    .first();
+
+                if (!member) {
+                    console.log(`User with email ${email} not found`);
+                    // Add the email to the notFoundEmails array
+                    notFoundEmails.push(email);
+                    continue;
+                }
+
+                // Add member to the ProjectUser table
+                await knex("ProjectUser").insert({
+                    projectId,
+                    userId: member.id,
+                });
+            } catch (error) {
+                console.error(
+                    `Error processing email ${email}: ${error.message}`
+                );
+                // Handle the error gracefully, log it, and continue with the next email
+                continue;
+            }
+        }
+
+        // If there are emails not found, throw ApiError
+        if (notFoundEmails.length > 0) {
+            throw new ApiError(
+                404,
+                `Users not found with emails: ${notFoundEmails.join(", ")}`
+            );
         }
     }
 
@@ -115,6 +157,7 @@ function makeProjectsService() {
     /**
      * Retrieve all projects with members and issues
      *
+     * @param {*} userId
      * @returns
      */
     async function retrieveProjectsBelongToUser(userId) {

@@ -1,24 +1,29 @@
 const makeProjectsService = require("../services/projects.service");
 const ApiError = require("../api-error");
 
+// controllers/project.controller.js
 async function createProject(req, res, next) {
-    if (!req.body?.name) {
-        return next(new ApiError(400, "Name and memberIds are required"));
+    const { name, description, image, memberEmails } = req.body;
+
+    if (!name) {
+        return next(new ApiError(400, "Name is required"));
     }
 
     try {
         const projectsService = makeProjectsService();
-
-        // Chuyển ownerId từ req.user.id vào hàm createProject
-        const project = await projectsService.createProject(
-            req.body,
-            req.user.id
-        );
+        const project = await projectsService.createProject({
+            name,
+            description,
+            image,
+            memberEmails,
+            ownerId: req.user.id,
+            ownerEmail: req.user.email,
+        });
 
         return res.send(project);
-    } catch (e) {
-        console.log(e);
-        return next(e);
+    } catch (error) {
+        console.error(error);
+        return next(error);
     }
 }
 
