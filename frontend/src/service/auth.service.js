@@ -32,22 +32,6 @@ const authService = {
             return false;
         }
     },
-    async register(name, email, password) {
-        try {
-            const response = await api.post("/register", {
-                name: name,
-                username: email,
-                password: password,
-            });
-
-            return response.data;
-        } catch (error) {
-            console.error(
-                "Cannot register: ",
-                error.response ? error.response.data : error.message
-            );
-        }
-    },
 };
 
 export default authService;
