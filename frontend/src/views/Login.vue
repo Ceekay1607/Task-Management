@@ -1,6 +1,6 @@
 <!-- Login.vue -->
 <script>
-import loginService from "@/service/login.service";
+import loginService from "@/service/auth.service";
 
 export default {
     data() {
@@ -123,7 +123,9 @@ export default {
                             </button>
                             <p class="small fw-bold mt-2 pt-1 mb-0">
                                 Don't have an account?
-                                <a href="#!" class="link-danger">Register</a>
+                                <router-link to="/register" class="link-danger"
+                                    >Register</router-link
+                                >
                             </p>
                         </div>
                     </form>

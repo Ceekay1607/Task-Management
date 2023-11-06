@@ -1,6 +1,7 @@
 const makeUsersService = require("../services/users.service");
 const makeUserAccountService = require("../services/userAccount.service");
 const ApiError = require("../api-error");
+const knex = require("knex");
 
 async function createUser(req, res, next) {
     if (!req.body?.name || !req.body?.email || !req.body?.password) {
@@ -10,13 +11,19 @@ async function createUser(req, res, next) {
     }
 
     try {
+        const userAccountService = makeUserAccountService();
+        const isEmailExist = await userAccountService.getUserByEmail(
+            req.body.email
+        );
+        if (isEmailExist) return next(new ApiError(400, "Email is exist"));
+
         const usersService = makeUsersService();
 
         // Step 1: Create user
         const user = await usersService.createUser(req.body);
 
         // Step 2: Create user account
-        const userAccountService = makeUserAccountService();
+
         const userAccount = await userAccountService.createUserAccount({
             userId: user.id,
             username: req.body.email,
