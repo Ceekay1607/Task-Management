@@ -5,7 +5,7 @@ const api = axios.create({
     baseURL: "/api/auth",
 });
 
-const loginService = {
+const authService = {
     async login(email, password) {
         try {
             const response = await api.post("/login", {
@@ -32,9 +32,6 @@ const loginService = {
             return false;
         }
     },
-};
-
-const registerService = {
     async register(name, email, password) {
         try {
             const response = await api.post("/register", {
@@ -53,7 +50,4 @@ const registerService = {
     },
 };
 
-export default {
-    loginService,
-    registerService,
-};
+export default authService;

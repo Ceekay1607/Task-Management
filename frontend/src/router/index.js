@@ -1,7 +1,7 @@
 // /router/index.js
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "../views/Login.vue";
-import loginService from "@/service/auth.service";
+import authService from "@/service/auth.service";
 
 const routes = [
     {
@@ -36,7 +36,7 @@ const router = createRouter({
 // navigation guard
 router.beforeEach(async (to, from, next) => {
     // redirect to login page if it is not authenticated
-    if (to.meta.requiresAuth && !(await loginService.isAuthenticated())) {
+    if (to.meta.requiresAuth && !(await authService.isAuthenticated())) {
         next({ name: "login" });
     } else {
         next();
