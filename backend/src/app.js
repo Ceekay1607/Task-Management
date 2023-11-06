@@ -8,6 +8,7 @@ const cors = require("cors");
 const app = express();
 
 const { resourceNotFound, handleError } = require("./controllers/errors");
+const store = session.Cookie();
 
 app.use(cors());
 app.use(express.json());
@@ -17,11 +18,14 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
+        store,
     })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+const { isAuthenticated } = require("./authMiddleware");
 
 //Handle authentication
 const authRouter = require("./routers/auth.router");

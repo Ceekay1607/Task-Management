@@ -1,6 +1,6 @@
 const express = require("express");
 const passport = require("../auth");
-
+const { isAuthenticated } = require("../authMiddleware");
 const router = express.Router();
 
 //Login
@@ -18,6 +18,10 @@ router.post("/logout", (req, res) => {
         }
         return res.json({ success: true, message: "Logout successful" });
     });
+});
+
+router.get("/isAuthenticated", isAuthenticated, (req, res) => {
+    res.json({ isAuthenticated: true });
 });
 
 module.exports = router;

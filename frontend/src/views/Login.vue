@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-header">Login</div>
                     <div class="card-body">
-                        <form @submit.prevent="login">
+                        <form @submit.prevent="login" v-if="!loading">
                             <div class="mb-3">
                                 <label for="email" class="form-label"
                                     >Email address</label
@@ -35,6 +35,7 @@
                                 Login
                             </button>
                         </form>
+                        <div v-else>Logging in...</div>
                     </div>
                 </div>
             </div>
@@ -50,27 +51,33 @@ export default {
         return {
             email: "",
             password: "",
+            loading: false,
         };
     },
     methods: {
         async login() {
             try {
+                this.loading = true;
                 const response = await loginService.login(
                     this.email,
                     this.password
                 );
                 console.log("Login successful:", response);
 
-                // redirect to project page
+                // Redirect to the project page
                 this.$router.push({ name: "project" });
             } catch (error) {
-                // Xử lý lỗi, hiển thị thông báo, vv.
+                // Handle errors, display messages, etc.
+                console.error(
+                    "Login failed:",
+                    error.response ? error.response.data : error.message
+                );
+            } finally {
+                this.loading = false;
             }
         },
     },
 };
 </script>
 
-<style scoped>
-/* Add any custom styles specific to this component */
-</style>
+<style scoped></style>
