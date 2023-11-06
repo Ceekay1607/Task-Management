@@ -1,4 +1,40 @@
 <!-- Login.vue -->
+<script>
+import loginService from "@/service/login.service";
+
+export default {
+    data() {
+        return {
+            email: "",
+            password: "",
+            loading: false,
+        };
+    },
+    methods: {
+        async login() {
+            try {
+                this.loading = true;
+                const response = await loginService.login(
+                    this.email,
+                    this.password
+                );
+                console.log("Login successful:", response);
+
+                // Redirect to the project page
+                this.$router.push({ name: "project" });
+            } catch (error) {
+                // Handle errors, display messages, etc.
+                console.error(
+                    "Login failed:",
+                    error.response ? error.response.data : error.message
+                );
+            } finally {
+                this.loading = false;
+            }
+        },
+    },
+};
+</script>
 
 <template>
     <section class="vh-100">
@@ -8,7 +44,7 @@
             >
                 <div class="col-md-9 col-lg-6 col-xl-5">
                     <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                        src="../image/draw2.webp"
                         class="img-fluid"
                         alt="Sample image"
                     />
@@ -94,46 +130,8 @@
                 </div>
             </div>
         </div>
-        <div
-            class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary"
-        >
-            <!-- Copyright -->
-            <div class="text-white mb-3 mb-md-0">
-                Copyright © 2020. All rights reserved.
-            </div>
-            <!-- Copyright -->
-        </div>
     </section>
 </template>
-
-<script>
-import loginService from "@/service/login.service";
-
-export default {
-    data() {
-        return {
-            email: "",
-            password: "",
-        };
-    },
-    methods: {
-        async login() {
-            try {
-                const response = await loginService.login(
-                    this.email,
-                    this.password
-                );
-                console.log("Login successful:", response);
-
-                // redirect to project page
-                this.$router.push({ name: "project" });
-            } catch (error) {
-                // Xử lý lỗi, hiển thị thông báo, vv.
-            }
-        },
-    },
-};
-</script>
 
 <style scoped>
 .divider:after,
