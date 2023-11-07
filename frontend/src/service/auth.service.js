@@ -32,6 +32,16 @@ const authService = {
             return false;
         }
     },
+
+    async logout() {
+        try {
+            const response = await axios.get("/logout");
+            return response.data;
+        } catch (error) {
+            console.error("logout failed: ", error);
+            return false;
+        }
+    },
 };
 
 export default authService;
