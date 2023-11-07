@@ -39,7 +39,7 @@ export default {
         async logout() {
             try {
                 const response = await authService.logout();
-                console.log(response);
+                console.log("message", response);
                 this.$router.push({ name: "login" });
             } catch (error) {
                 console.error(

@@ -35,7 +35,7 @@ const authService = {
 
     async logout() {
         try {
-            const response = await axios.get("/logout");
+            const response = await api.post("/logout");
             return response.data;
         } catch (error) {
             console.error("logout failed: ", error);

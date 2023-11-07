@@ -37,9 +37,9 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     // redirect to login page if it is not authenticated
     if (to.meta.requiresAuth && !(await authService.isAuthenticated())) {
-        next({ name: "login" });
+        return next({ name: "login" });
     } else {
-        next();
+        return next();
     }
 });
 
