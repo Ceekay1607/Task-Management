@@ -56,9 +56,9 @@
 
 .card-body {
     display: flex;
-    flex-direction: row; /* Change to column layout */
+    flex-direction: row;
     justify-content: space-between;
-    max-height: 250px; /* Set a maximum height for the card body */
+    max-height: 250px;
     overflow: hidden;
 }
 
@@ -70,14 +70,14 @@
 .card-title {
     font-size: 1.2em;
     overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis for long titles */
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .card-text {
     font-size: 1em;
     overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis for long text */
+    text-overflow: ellipsis;
 }
 
 .cta-section {
@@ -108,7 +108,7 @@
 <script setup>
 import { ref } from "vue";
 
-const { project, confirmDelete } = defineProps({
+const { project } = defineProps({
     project: { type: Object, required: true },
 });
 </script>
