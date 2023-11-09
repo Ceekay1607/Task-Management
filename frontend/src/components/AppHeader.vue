@@ -1,12 +1,12 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img
                     src="../image/yuai.jpg"
                     alt="Logo"
-                    width="40"
-                    height="40"
+                    width="50"
+                    height="50"
                     class="d-inline-block"
                 />
                 <span style="margin-left: 10px">Panda project</span>
@@ -16,7 +16,7 @@
                 <UserProfile :user="userInfo" />
             </div>
         </div>
-    </nav>
+    </div>
 </template>
 
 <script setup>
@@ -29,10 +29,7 @@ const userInfo = props.user;
 </script>
 
 <style>
-.btn:focus {
-    box-shadow: none;
-}
-nav {
-    margin-top: 10px;
+.navbar {
+    box-shadow: 0 5px 5px -5px gray;
 }
 </style>
