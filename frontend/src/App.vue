@@ -3,7 +3,7 @@ import AppHeader from "@/components/AppHeader.vue";
 </script>
 
 <template>
-    <div class="container mt-3">
+    <div class="container-fluid">
         <router-view />
     </div>
 </template>

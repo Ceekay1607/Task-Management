@@ -59,18 +59,35 @@ async function retrieveAllUsers(req, res, next) {
     return res.send(users);
 }
 
-async function getUserById(req, res, next) {
+// async function getUserById(req, res, next) {
+//     try {
+//         const usersService = makeUsersService();
+//         const user = await usersService.getUserById(req.params.id);
+//         if (!user) {
+//             return next(new ApiError(404, "User not found"));
+//         }
+//         return res.send(user);
+//     } catch (error) {
+//         console.log(error);
+//         return next(
+//             new ApiError(500, `Error retrieving user with id=${req.params.id}`)
+//         );
+//     }
+// }
+
+async function getUserInfo(req, res, next) {
     try {
         const usersService = makeUsersService();
-        const user = await usersService.getUserById(req.params.id);
-        if (!user) {
-            return next(new ApiError(404, "User not found"));
-        }
+        const user = await usersService.getUserById(req.user.id);
+        console.log(user);
+        // if (!user) {
+        //     return next(new ApiError(404, "User not found"));
+        // }
         return res.send(user);
     } catch (error) {
         console.log(error);
         return next(
-            new ApiError(500, `Error retrieving user with id=${req.params.id}`)
+            new ApiError(500, `Error retrieving user with id=${req.user.id}`)
         );
     }
 }
@@ -130,7 +147,7 @@ async function deleteAllUsers(req, res, next) {
 module.exports = {
     createUser,
     retrieveAllUsers,
-    getUserById,
+    getUserInfo,
     updateUser,
     deleteUser,
     deleteAllUsers,

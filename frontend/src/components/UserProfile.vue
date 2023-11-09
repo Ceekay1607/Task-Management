@@ -7,15 +7,15 @@
             aria-expanded="false"
             width="60px"
         >
-            <img :src="img" class="btn-img" />
+            <img id="user-avatar" :src="image" class="btn-img border" />
         </button>
         <ul class="dropdown-menu dropdown-menu-end text-center">
             <li class="">
-                <img :src="img" alt="" class="li-img" />
+                <img :src="image" alt="" class="li-img" />
             </li>
 
             <li>
-                <span>Yu Ai</span>
+                <span>{{ name }}</span>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -27,29 +27,32 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import img from "@/image/yuai.jpg";
+import { useRouter } from "vue-router";
 import authService from "@/service/auth.service";
 
-export default {
-    data() {
-        return { img };
-    },
-    methods: {
-        async logout() {
-            try {
-                const response = await authService.logout();
-                console.log("message", response);
-                this.$router.push({ name: "login" });
-            } catch (error) {
-                console.error(
-                    "logout failed: ",
-                    error.response ? error.response.data : error.message
-                );
-            }
-        },
-    },
-};
+const props = defineProps({
+    user: { type: Object, require: true },
+});
+
+const $router = useRouter();
+const user = props.user;
+const name = user.name;
+const image = user.image;
+
+async function logout() {
+    try {
+        const response = await authService.logout();
+        console.log("message", user);
+        $router.push({ name: "login" });
+    } catch (error) {
+        console.error(
+            "logout failed: ",
+            error.response ? error.response.data : error.message
+        );
+    }
+}
 </script>
 
 <style>
@@ -71,5 +74,12 @@ export default {
 .btn:focus,
 .btn {
     border: none;
+}
+.btn-img:hover {
+    border: solid rgb(40, 35, 35) 9c9;
+}
+
+#user-avatar:hover {
+    border: solid rgb(40, 35, 35) 9c9;
 }
 </style>

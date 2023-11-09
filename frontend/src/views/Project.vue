@@ -1,15 +1,13 @@
 <template>
-    <AppHeader />
+    <AppHeader :user="userInfo" />
     Hi, Project!
 </template>
 
 <script setup>
 import AppHeader from "@/components/AppHeader.vue";
-</script>
+import usersService from "@/service/users.service";
+import { useUsers } from "@/composables/useUsers";
 
-<style scoped>
-.page {
-    min-width: 400px;
-    margin: auto;
-}
-</style>
+const { retrieveUser } = useUsers();
+const userInfo = retrieveUser();
+</script>

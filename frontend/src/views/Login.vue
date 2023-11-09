@@ -18,9 +18,7 @@ export default {
                     this.email,
                     this.password
                 );
-                console.log("Login successful:", response);
 
-                // Redirect to the project page
                 this.$router.push({ name: "project" });
             } catch (error) {
                 // Handle errors, display messages, etc.
