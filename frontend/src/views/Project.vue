@@ -1,5 +1,5 @@
 <template>
-    <AppHeader />
+    <AppHeader :user="userInfo" />
     <div class="page">
         <div class="row mt-5">
             <h1>MY PROJECTS</h1>
@@ -18,6 +18,10 @@
 import AppHeader from "@/components/AppHeader.vue";
 import ProjectCard from "@/components/ProjectCard.vue";
 import { useProjects } from "@/composables/useProjects";
+import { useUsers } from "@/composables/useUsers";
+
+const { retrieveUser } = useUsers();
+const userInfo = retrieveUser();
 
 const { retrieveProjectsQuery } = useProjects();
 const { projects } = retrieveProjectsQuery();

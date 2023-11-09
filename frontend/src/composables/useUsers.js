@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import userService from "../service/users.service";
 import { computed } from "vue";
+import usersService from "../service/users.service";
 
 export function useUsers() {
     const queryClient = useQueryClient();
@@ -8,7 +8,7 @@ export function useUsers() {
     function retrieveUsersQuery() {
         const { data: usersArray } = useQuery({
             queryKey: ["users"],
-            queryFn: () => userService.getUsers(),
+            queryFn: () => usersService.getUsers(),
         });
 
         const users = computed(() => {
@@ -24,7 +24,18 @@ export function useUsers() {
         };
     }
 
+    function retrieveUser() {
+        const { data: user } = useQuery({
+            queryKey: ["user"],
+            queryFn: () => usersService.getUserInfo(),
+        });
+
+        console.log(user);
+
+        return user;
+    }
     return {
         retrieveUsersQuery,
+        retrieveUser,
     };
 }

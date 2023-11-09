@@ -12,8 +12,9 @@ router
 
 router
     .route("/:id")
-    .get(isAuthenticated, usersController.getUserById)
     .put(isAuthenticated, usersController.updateUser)
     .delete(isAuthenticated, usersController.deleteUser);
+
+router.route("/info").get(isAuthenticated, usersController.getUserInfo);
 
 module.exports = router;

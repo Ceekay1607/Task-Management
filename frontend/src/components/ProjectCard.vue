@@ -1,11 +1,8 @@
 <template>
-    <div class="col-lg-4 col-md-6 col-sm-12">
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
         <router-link
             style="text-decoration: none; color: inherit"
-            :to="{
-                name: 'issues',
-                params: { projectId: project.projectId },
-            }"
+            :to="{ name: 'issues', params: { projectId: project.projectId } }"
         >
             <div class="card dark mb-5">
                 <img
@@ -23,7 +20,7 @@
                         </p>
                     </div>
                     <div class="cta-section">
-                        <div></div>
+                        <div class=""></div>
                         <a href="#" class="btn btn-danger">Delete</a>
                     </div>
                 </div>
@@ -31,15 +28,6 @@
         </router-link>
     </div>
 </template>
-
-<script setup>
-import { ref } from "vue";
-
-const { project, confirmDelete } = defineProps({
-    project: { type: Object, required: true },
-    confirmDelete: { type: Function, required: true },
-});
-</script>
 
 <style scoped>
 .card {
@@ -65,18 +53,33 @@ const { project, confirmDelete } = defineProps({
     object-fit: cover;
     transition: transform 0.2s;
 }
+
 .card-body {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Change to column layout */
     justify-content: space-between;
-}
-.card:hover .card-body {
-    background-color: #f8f9fa;
+    max-height: 250px; /* Set a maximum height for the card body */
+    overflow: hidden;
 }
 
 .text-section {
     max-width: 60%;
+    overflow-y: auto;
 }
+
+.card-title {
+    font-size: 1.2em;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for long titles */
+    white-space: nowrap;
+}
+
+.card-text {
+    font-size: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for long text */
+}
+
 .cta-section {
     max-width: 40%;
     display: flex;
@@ -84,6 +87,7 @@ const { project, confirmDelete } = defineProps({
     align-items: flex-end;
     justify-content: space-between;
 }
+
 .cta-section .btn {
     padding: 0.2em 0.5em;
     font-size: 1em;
@@ -91,8 +95,20 @@ const { project, confirmDelete } = defineProps({
 }
 
 @media screen and (max-width: 475px) {
-    .card {
-        font-size: 0.7em;
+    .card-title {
+        font-size: 1em;
+    }
+
+    .card-text {
+        font-size: 0.8em;
     }
 }
 </style>
+
+<script setup>
+import { ref } from "vue";
+
+const { project, confirmDelete } = defineProps({
+    project: { type: Object, required: true },
+});
+</script>

@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar bg-body-tertiary w-auto">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img
@@ -13,7 +13,7 @@
             </a>
 
             <div>
-                <UserProfile />
+                <UserProfile :user="userInfo" />
             </div>
         </div>
     </nav>
@@ -21,10 +21,18 @@
 
 <script setup>
 import UserProfile from "@/components/UserProfile.vue";
+const props = defineProps({
+    user: { type: Object, require: true },
+});
+
+const userInfo = props.user;
 </script>
 
 <style>
 .btn:focus {
     box-shadow: none;
+}
+nav {
+    margin-top: 10px;
 }
 </style>
