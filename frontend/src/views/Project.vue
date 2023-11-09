@@ -1,7 +1,7 @@
 <template>
     <AppHeader :user="userInfo" />
     <div class="page">
-        <div class="row mt-5">
+        <div class="row mt-3">
             <h1>MY PROJECTS</h1>
         </div>
         <div class="row">
@@ -30,7 +30,7 @@ const { projects } = retrieveProjectsQuery();
 <style scoped>
 .page {
     min-width: 400px;
-    margin: auto;
+    padding: 0 2rem 0 2rem;
 }
 
 .row {
