@@ -1,12 +1,13 @@
 const ApiError = require("../api-error");
 const knex = require("../database/knex");
+const { faker } = require("@faker-js/faker");
 
 function makeProjectsService() {
     function readProject(payload) {
         const project = {
             name: payload.name,
             description: payload.description,
-            image: payload.image,
+            image: payload?.image ?? faker.image.urlLoremFlickr(),
             ownerId: payload.ownerId,
         };
 

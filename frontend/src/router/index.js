@@ -22,6 +22,12 @@ const routes = [
         component: () => import("../views/Register.vue"),
     },
     {
+        path: "/project/:projectId",
+        name: "issues",
+        component: () => import("../views/Issue.vue"),
+        props: (route) => ({ projectId: route.params.projectId }),
+    },
+    {
         path: "/:pathMatch(.*)*",
         name: "notfound",
         component: () => import("../views/NotFound.vue"),
