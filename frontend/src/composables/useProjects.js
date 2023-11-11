@@ -16,7 +16,19 @@ export function useProjects() {
         };
     }
 
+    function retrieveProjectById(id) {
+        const { data: project } = useQuery({
+            queryKey: ["project"],
+            queryFn: () => projectsService.getProjectById(id),
+        });
+
+        return {
+            project,
+        };
+    }
+
     return {
         retrieveProjectsQuery,
+        retrieveProjectById,
     };
 }

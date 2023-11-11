@@ -121,7 +121,12 @@ function makeProjectsService() {
         try {
             // Retrieve the project with owner and members
             const project = await knex("Project")
-                .select("*")
+                .select(
+                    "Project.name as name",
+                    "Project.description as description",
+                    "user.id as OwnerId",
+                    "user.name as Owner"
+                )
                 .leftJoin("User", "Project.ownerId", "User.id")
                 .where("Project.id", projectId)
                 .first();

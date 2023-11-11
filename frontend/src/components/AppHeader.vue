@@ -1,9 +1,9 @@
 <template>
-    <div class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar fixed-top navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img
-                    src="../image/yuai.jpg"
+                    src="../image/pngegg.png"
                     alt="Logo"
                     width="50"
                     height="50"
@@ -22,7 +22,7 @@
 <script setup>
 import UserProfile from "@/components/UserProfile.vue";
 const props = defineProps({
-    user: { type: Object, require: true },
+    user: { type: Object, require: false },
 });
 
 const userInfo = props.user;

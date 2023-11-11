@@ -9,8 +9,14 @@ function makeProjectService() {
         return await fetch(url).then((res) => res.json());
     }
 
+    async function getProjectById(id) {
+        let url = `${baseUrl}/${id}`;
+        return await fetch(url).then((res) => res.json());
+    }
+
     return {
         getProjects,
+        getProjectById,
     };
 }
 

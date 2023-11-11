@@ -79,10 +79,9 @@ async function getUserInfo(req, res, next) {
     try {
         const usersService = makeUsersService();
         const user = await usersService.getUserById(req.user.id);
-        console.log(user);
-        // if (!user) {
-        //     return next(new ApiError(404, "User not found"));
-        // }
+        if (!user) {
+            return next(new ApiError(404, "User not found"));
+        }
         return res.send(user);
     } catch (error) {
         console.log(error);

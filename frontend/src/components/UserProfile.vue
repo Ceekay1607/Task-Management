@@ -7,15 +7,15 @@
             aria-expanded="false"
             width="60px"
         >
-            <img id="user-avatar" :src="image" class="btn-img border" />
+            <img id="user-avatar" :src="user.image" class="btn-img border" />
         </button>
         <ul class="dropdown-menu dropdown-menu-end text-center">
             <li class="">
-                <img :src="image" alt="" class="li-img" />
+                <img :src="user.image" alt="" class="li-img" />
             </li>
 
             <li>
-                <span>{{ name }}</span>
+                <span>{{ user.name }}</span>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -33,13 +33,11 @@ import { useRouter } from "vue-router";
 import authService from "@/service/auth.service";
 
 const props = defineProps({
-    user: { type: Object, require: true },
+    user: { type: Object, require: false },
 });
 
 const $router = useRouter();
 const user = props.user;
-const name = user.name;
-const image = user.image;
 
 async function logout() {
     try {
