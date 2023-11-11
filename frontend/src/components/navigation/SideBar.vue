@@ -9,13 +9,16 @@
 
             <ul class="sidebar-nav nav-tabs">
                 <li class="sidebar-item nav-link">
-                    <router-link to="/board" class="sidebar-link text-dark">
+                    <router-link
+                        :to="{ name: 'board' }"
+                        class="sidebar-link text-dark"
+                    >
                         Issues
                     </router-link>
                 </li>
                 <li class="sidebar-item nav-link">
                     <router-link
-                        to="/editProject"
+                        :to="{ name: 'editProject' }"
                         class="sidebar-link text-dark"
                     >
                         Settings
@@ -28,8 +31,6 @@
 </template>
 
 <script setup>
-import ProjectForm from "./ProjectForm.vue";
-import IssueCard from "./IssueCard.vue";
 // const props = defineProps({
 //     project: { type: Object, require: true },
 // });

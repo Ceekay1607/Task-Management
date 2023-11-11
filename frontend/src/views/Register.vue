@@ -6,7 +6,7 @@
             >
                 <div class="col-md-9 col-lg-6 col-xl-5">
                     <img
-                        src="../image/draw2.webp"
+                        src="@\assets\image\loginPage.webp"
                         class="img-fluid"
                         alt="Sample image"
                     />

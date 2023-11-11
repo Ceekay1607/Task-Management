@@ -28,7 +28,6 @@
 </template>
 
 <script setup>
-import img from "@/image/yuai.jpg";
 import { useRouter } from "vue-router";
 import authService from "@/service/auth.service";
 

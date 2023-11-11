@@ -29,12 +29,12 @@ const routes = [
             {
                 path: "board",
                 name: "board",
-                component: () => import("../components/IssueCard.vue"),
+                component: () => import("../components/issues/IssueCard.vue"),
             },
             {
                 path: "editProject",
                 name: "editProject",
-                component: () => import("../components/ProjectForm.vue"),
+                component: () => import("../components/projects/ProjectForm.vue"),
             },
         ],
         props: (route) => ({ projectId: route.params.projectId }),

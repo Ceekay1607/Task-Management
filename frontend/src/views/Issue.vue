@@ -10,10 +10,10 @@
 <script setup>
 import { useRoute } from "vue-router";
 
-import AppHeader from "@/components/AppHeader.vue";
-import SideBar from "@/components/SideBar.vue";
-import ProjectForm from "@/components/ProjectForm.vue";
-import IssueCard from "@/components/IssueCard.vue";
+import AppHeader from "@/components/header/AppHeader.vue";
+import SideBar from "@/components/navigation/SideBar.vue";
+import ProjectForm from "@/components/projects/ProjectForm.vue";
+import IssueCard from "@/components/issues/IssueCard.vue";
 
 const $route = useRoute();
 

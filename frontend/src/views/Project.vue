@@ -25,9 +25,9 @@
 </template>
 
 <script setup>
-import AppHeader from "@/components/AppHeader.vue";
-import ProjectCard from "@/components/ProjectCard.vue";
-import AddProjectForm from "@/components/AddProjectForm.vue";
+import AppHeader from "@/components/header/AppHeader.vue";
+import ProjectCard from "@/components/projects/ProjectCard.vue";
+import AddProjectForm from "@/components/projects/AddProjectForm.vue";
 
 import { useProjects } from "@/composables/useProjects";
 import { useUsers } from "@/composables/useUsers";

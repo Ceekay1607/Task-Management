@@ -1,39 +1,4 @@
 <!-- Login.vue -->
-<script>
-import loginService from "@/service/auth.service";
-
-export default {
-    data() {
-        return {
-            email: "",
-            password: "",
-            loading: false,
-        };
-    },
-    methods: {
-        async login() {
-            try {
-                this.loading = true;
-                const response = await loginService.login(
-                    this.email,
-                    this.password
-                );
-
-                this.$router.push({ name: "project" });
-            } catch (error) {
-                // Handle errors, display messages, etc.
-                console.error(
-                    "Login failed:",
-                    error.response ? error.response.data : error.message
-                );
-            } finally {
-                this.loading = false;
-            }
-        },
-    },
-};
-</script>
-
 <template>
     <section class="vh-100">
         <div class="container-fluid h-custom">
@@ -42,7 +7,7 @@ export default {
             >
                 <div class="col-md-9 col-lg-6 col-xl-5">
                     <img
-                        src="../image/draw2.webp"
+                        src="@\assets\image\loginPage.webp"
                         class="img-fluid"
                         alt="Sample image"
                     />
@@ -111,6 +76,42 @@ export default {
         </div>
     </section>
 </template>
+
+<script>
+import loginService from "@/service/auth.service";
+import loginImage from "@/assets/image/loginPage.webp";
+
+export default {
+    data() {
+        return {
+            email: "",
+            password: "",
+            loading: false,
+        };
+    },
+    methods: {
+        async login() {
+            try {
+                this.loading = true;
+                const response = await loginService.login(
+                    this.email,
+                    this.password
+                );
+
+                this.$router.push({ name: "project" });
+            } catch (error) {
+                // Handle errors, display messages, etc.
+                console.error(
+                    "Login failed:",
+                    error.response ? error.response.data : error.message
+                );
+            } finally {
+                this.loading = false;
+            }
+        },
+    },
+};
+</script>
 
 <style scoped>
 .divider:after,

@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img
-                    src="../image/pngegg.png"
+                    :src="projectLogo"
                     alt="Logo"
                     width="50"
                     height="50"
@@ -20,7 +20,8 @@
 </template>
 
 <script setup>
-import UserProfile from "@/components/UserProfile.vue";
+import UserProfile from "@/components/header/UserProfile.vue";
+import projectLogo from "@/assets/image/Logo.png";
 const props = defineProps({
     user: { type: Object, require: false },
 });
