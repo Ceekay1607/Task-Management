@@ -7,8 +7,8 @@ async function createIssue(req, res, next) {
     if (
         !req.body ||
         !req.body.name ||
-        !req.body.reporterId ||
-        !req.body.assigneeId
+        !req.body.reporterEmail ||
+        !req.body.assigneeEmail
     ) {
         return next(new ApiError(400, "Invalid issue data"));
     }

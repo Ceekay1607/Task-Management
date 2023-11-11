@@ -59,21 +59,21 @@ async function retrieveAllUsers(req, res, next) {
     return res.send(users);
 }
 
-// async function getUserById(req, res, next) {
-//     try {
-//         const usersService = makeUsersService();
-//         const user = await usersService.getUserById(req.params.id);
-//         if (!user) {
-//             return next(new ApiError(404, "User not found"));
-//         }
-//         return res.send(user);
-//     } catch (error) {
-//         console.log(error);
-//         return next(
-//             new ApiError(500, `Error retrieving user with id=${req.params.id}`)
-//         );
-//     }
-// }
+async function getUserById(req, res, next) {
+    try {
+        const usersService = makeUsersService();
+        const user = await usersService.getUserById(req.params.id);
+        if (!user) {
+            return next(new ApiError(404, "User not found"));
+        }
+        return res.send(user);
+    } catch (error) {
+        console.log(error);
+        return next(
+            new ApiError(500, `Error retrieving user with id=${req.params.id}`)
+        );
+    }
+}
 
 async function getUserInfo(req, res, next) {
     try {

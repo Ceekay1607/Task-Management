@@ -2,15 +2,23 @@ const ApiError = require("../api-error");
 const knex = require("../database/knex");
 
 function makeIssuesService() {
+    async function getUserIdByEmail(email) {
+        const user = await knex("User")
+            .select("id")
+            .where("email", email)
+            .first();
+        return user ? user.id : null;
+    }
+
     function readIssue(payload) {
         const issue = {
             projectId: payload.projectId,
-            categoryId: payload.categoryId,
+            categoryId: payload?.categoryId ?? 1,
             name: payload.name,
             description: payload.description,
-            reporterId: payload.reporterId,
-            assigneeId: payload.assigneeId,
-            priorityId: payload.priorityId,
+            reporterEmail: payload.reporterEmail,
+            assigneeEmail: payload.assigneeEmail,
+            priorityId: payload?.priorityId ?? 1,
         };
 
         Object.keys(issue).forEach(
@@ -32,14 +40,15 @@ function makeIssuesService() {
                 .first();
 
             if (!projectExists) {
-                return new ApiError(404, "Project not found");
+                throw new ApiError(404, "Project not found");
             }
 
-            // Check if reporterId is a member of the project
+            // Check if reporterEmail is a member of the project
+            const reporterId = await getUserIdByEmail(issue.reporterEmail);
             const reporterIsMember = await knex("ProjectUser")
                 .where({
                     projectId: projectId,
-                    userId: issue.reporterId,
+                    userId: reporterId,
                 })
                 .first();
 
@@ -50,11 +59,12 @@ function makeIssuesService() {
                 );
             }
 
-            // Check if assigneeId is a member of the project
+            // Check if assigneeEmail is a member of the project
+            const assigneeId = await getUserIdByEmail(issue.assigneeEmail);
             const assigneeIsMember = await knex("ProjectUser")
                 .where({
                     projectId: projectId,
-                    userId: issue.assigneeId,
+                    userId: assigneeId,
                 })
                 .first();
 
@@ -78,7 +88,13 @@ function makeIssuesService() {
             const [newIssueId] = await knex("Issue").insert({
                 projectId,
                 number: nextIssueNumber,
-                ...issue,
+                projectId: issue.priorityId,
+                categoryId: issue.categoryId,
+                priorityId: issue.priorityId,
+                name: issue.name,
+                description: issue.description,
+                reporterId,
+                assigneeId,
             });
 
             // Retrieve the created issue
