@@ -32,7 +32,9 @@ export function useUsers() {
 
         console.log(user);
 
-        return user;
+        return {
+            user,
+        };
     }
     return {
         retrieveUsersQuery,

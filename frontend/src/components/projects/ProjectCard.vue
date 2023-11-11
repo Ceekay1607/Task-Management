@@ -29,6 +29,14 @@
     </div>
 </template>
 
+<script setup>
+import { ref } from "vue";
+
+const { project } = defineProps({
+    project: { type: Object, required: true },
+});
+</script>
+
 <style scoped>
 .card {
     max-width: 30em;
@@ -104,11 +112,3 @@
     }
 }
 </style>
-
-<script setup>
-import { ref } from "vue";
-
-const { project } = defineProps({
-    project: { type: Object, required: true },
-});
-</script>

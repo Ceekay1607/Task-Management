@@ -7,11 +7,20 @@
             aria-expanded="false"
             width="60px"
         >
-            <img id="user-avatar" :src="user.image" class="btn-img border" />
+            <img
+                v-if="user && user.image"
+                :src="user.image"
+                class="btn-img border"
+            />
         </button>
         <ul class="dropdown-menu dropdown-menu-end text-center">
             <li class="">
-                <img :src="user.image" alt="" class="li-img" />
+                <img
+                    v-if="user && user.image"
+                    :src="user.image"
+                    alt=""
+                    class="li-img"
+                />
             </li>
 
             <li>
@@ -31,12 +40,11 @@
 import { useRouter } from "vue-router";
 import authService from "@/service/auth.service";
 
-const props = defineProps({
-    user: { type: Object, require: false },
+const { user } = defineProps({
+    user: { type: Object, require: true },
 });
 
 const $router = useRouter();
-const user = props.user;
 
 async function logout() {
     try {

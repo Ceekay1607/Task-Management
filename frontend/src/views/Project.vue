@@ -1,5 +1,5 @@
 <template>
-    <AppHeader :user="userInfo" />
+    <AppHeader :user="user" />
     <div>
         <div class="page">
             <header class="d-flex flex-wrap">
@@ -33,7 +33,8 @@ import { useProjects } from "@/composables/useProjects";
 import { useUsers } from "@/composables/useUsers";
 
 const { retrieveUser } = useUsers();
-const userInfo = retrieveUser();
+const { user } = retrieveUser();
+console.log("Project.vue user: " + user);
 
 const { retrieveProjectsQuery } = useProjects();
 const { projects } = retrieveProjectsQuery();

@@ -13,7 +13,7 @@
             </a>
 
             <div>
-                <UserProfile :user="userInfo" />
+                <UserProfile :user="user" />
             </div>
         </div>
     </div>
@@ -22,11 +22,9 @@
 <script setup>
 import UserProfile from "@/components/header/UserProfile.vue";
 import projectLogo from "@/assets/image/Logo.png";
-const props = defineProps({
-    user: { type: Object, require: false },
+const { user } = defineProps({
+    user: { type: Object, require: true },
 });
-
-const userInfo = props.user;
 </script>
 
 <style>
