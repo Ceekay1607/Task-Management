@@ -27,12 +27,12 @@ const routes = [
         component: () => import("../views/Issue.vue"),
         children: [
             {
-                path: "/board",
+                path: "board",
                 name: "board",
                 component: () => import("../components/IssueCard.vue"),
             },
             {
-                path: "/editProject",
+                path: "editProject",
                 name: "editProject",
                 component: () => import("../components/ProjectForm.vue"),
             },
