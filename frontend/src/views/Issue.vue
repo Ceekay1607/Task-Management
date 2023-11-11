@@ -12,7 +12,7 @@ import { useRoute } from "vue-router";
 
 import AppHeader from "@/components/header/AppHeader.vue";
 import SideBar from "@/components/navigation/SideBar.vue";
-import ProjectForm from "@/components/projects/ProjectForm.vue";
+import ProjectForm from "@/components/projects/ProjectEditForm.vue";
 import IssueCard from "@/components/issues/IssueCard.vue";
 
 const $route = useRoute();
