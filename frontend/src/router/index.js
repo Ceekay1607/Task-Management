@@ -25,8 +25,21 @@ const routes = [
         path: "/project/:projectId",
         name: "issues",
         component: () => import("../views/Issue.vue"),
+        children: [
+            {
+                path: "/board",
+                name: "board",
+                component: () => import("../components/IssueCard.vue"),
+            },
+            {
+                path: "/editProject",
+                name: "editProject",
+                component: () => import("../components/ProjectForm.vue"),
+            },
+        ],
         props: (route) => ({ projectId: route.params.projectId }),
     },
+
     {
         path: "/:pathMatch(.*)*",
         name: "notfound",

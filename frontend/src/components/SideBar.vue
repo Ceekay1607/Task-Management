@@ -1,26 +1,40 @@
 <template>
-    <aside id="sidebar" class="vh-100">
-        <router-link to="/">
-            <div class="sidebar-logo">
-                <a href="#" class="text-dark">Project</a>
-            </div>
-        </router-link>
+    <div class="row flex-nowrap main-page">
+        <aside id="sidebar" class="vh-100">
+            <router-link to="/">
+                <div class="sidebar-logo">
+                    <a href="#" class="text-dark">Project</a>
+                </div>
+            </router-link>
 
-        <ul class="sidebar-nav nav-tabs">
-            <li class="sidebar-item nav-link active">
-                <a href="#" class="sidebar-link text-dark"> Issues </a>
-            </li>
-            <li class="sidebar-item nav-link active">
-                <a href="#" class="sidebar-link text-dark"> Settings </a>
-            </li>
-        </ul>
-    </aside>
+            <ul class="sidebar-nav nav-tabs">
+                <li class="sidebar-item nav-link">
+                    <router-link to="/board" class="sidebar-link text-dark">
+                        Issues
+                    </router-link>
+                </li>
+                <li class="sidebar-item nav-link">
+                    <router-link
+                        to="/editProject"
+                        class="sidebar-link text-dark"
+                    >
+                        Settings
+                    </router-link>
+                </li>
+            </ul>
+        </aside>
+        <router-view />
+    </div>
 </template>
 
 <script setup>
-const props = defineProps({
-    project: { type: Object, require: true },
-});
+import ProjectForm from "./ProjectForm.vue";
+import IssueCard from "./IssueCard.vue";
+// const props = defineProps({
+//     project: { type: Object, require: true },
+// });
+
+function board() {}
 </script>
 
 <style scoped>

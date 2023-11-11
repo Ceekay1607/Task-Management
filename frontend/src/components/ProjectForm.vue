@@ -14,7 +14,6 @@
                     type="name"
                     id="name"
                     class="form-control form-control-lg"
-                    :value="project.name"
                     required
                 />
             </div>
@@ -26,7 +25,6 @@
                     type="description"
                     id="description"
                     class="form-control form-control-lg"
-                    :value="project.description"
                     required
                 />
             </div>
@@ -51,10 +49,4 @@
     </div>
 </template>
 
-<script setup>
-const props = defineProps({
-    project: { type: Object, require: false },
-});
-
-const project = props.project.project;
-</script>
+<script setup></script>

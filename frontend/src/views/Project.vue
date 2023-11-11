@@ -4,15 +4,7 @@
         <div class="page">
             <header class="d-flex flex-wrap">
                 <h1>MY PROJECTS</h1>
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    @click="toggleForm"
-                >
-                    {{ invisible }}
-                </button>
-
-                <AddProjectForm :showForm="showForm" />
+                <button type="submit" class="btn btn-primary">New</button>
             </header>
 
             <div
@@ -45,12 +37,6 @@ const userInfo = retrieveUser();
 
 const { retrieveProjectsQuery } = useProjects();
 const { projects } = retrieveProjectsQuery();
-
-const showForm = false;
-
-const toggleForm = () => {
-    showForm = true;
-};
 </script>
 
 <style scoped>
