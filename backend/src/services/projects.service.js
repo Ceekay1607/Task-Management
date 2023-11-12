@@ -124,20 +124,21 @@ function makeProjectsService() {
                 .select(
                     "Project.name as name",
                     "Project.description as description",
-                    "user.id as OwnerId",
-                    "user.name as Owner"
+                    "user.id as ownerId",
+                    "user.name as ownerName",
+                    "user.email as ownerEmail"
                 )
                 .leftJoin("User", "Project.ownerId", "User.id")
                 .where("Project.id", projectId)
                 .first();
 
             if (!project) {
-                return new ApiError(404, "Project not found");
+                throw new ApiError(404, "Project not found");
             }
 
             // Retrieve members associated with the project
             const members = await knex("ProjectUser")
-                .select("User.id as memberId", "User.name as memberName")
+                .select("User.name as memberName", "User.email as memberEmail")
                 .leftJoin("User", "ProjectUser.userId", "User.id")
                 .where("ProjectUser.projectId", projectId);
 
@@ -146,8 +147,31 @@ function makeProjectsService() {
 
             // Retrieve issues associated with the project
             const issues = await knex("Issue")
-                .select("*")
-                .where("projectId", projectId);
+                .select(
+                    "Issue.id",
+                    "Issue.number",
+                    "Issue.name as issueName",
+                    "Issue.description as issueDescription",
+                    "UserReporter.name as reporterName",
+                    "UserReporter.email as reporterEmail",
+                    "UserAssignee.name as assigneeName",
+                    "UserAssignee.email as assigneeEmail",
+                    "Priority.name as priorityName",
+                    "Issue.createdAt",
+                    "Issue.updatedAt"
+                )
+                .leftJoin(
+                    "User as UserReporter",
+                    "Issue.reporterId",
+                    "UserReporter.id"
+                )
+                .leftJoin(
+                    "User as UserAssignee",
+                    "Issue.assigneeId",
+                    "UserAssignee.id"
+                )
+                .leftJoin("Priority", "Issue.priorityId", "Priority.id")
+                .where("Issue.projectId", projectId);
 
             // Add the 'issues' property to each project
             project.issues = issues;
@@ -156,7 +180,11 @@ function makeProjectsService() {
         } catch (error) {
             console.error(error);
             // Rethrow the error or handle it accordingly
-            throw new Error("Internal Server Error");
+            if (error instanceof ApiError) {
+                throw error;
+            } else {
+                throw new ApiError(500, "Internal Server Error");
+            }
         }
     }
 
@@ -194,7 +222,10 @@ function makeProjectsService() {
 
                     // Retrieve members associated with the project
                     const members = await knex("ProjectUser as PU")
-                        .select("U.id as memberId", "U.name as memberName")
+                        .select(
+                            "U.name as memberName",
+                            "U.email as memberEmail"
+                        )
                         .leftJoin("User as U", "PU.userId", "U.id")
                         .where("PU.projectId", projectId);
 
