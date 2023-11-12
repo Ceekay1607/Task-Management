@@ -24,10 +24,11 @@ const routes = [
     {
         path: "/project/:projectId",
         name: "issues",
+        redirect: { name: "board" },
         component: () => import("../views/Issue.vue"),
         children: [
             {
-                path: "",
+                path: "board",
                 name: "board",
                 component: () => import("../components/issues/IssueCard.vue"),
             },

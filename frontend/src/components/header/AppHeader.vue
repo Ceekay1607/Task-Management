@@ -28,6 +28,9 @@ const { user } = defineProps({
 </script>
 
 <style>
+template {
+    font-family: "Poppins", sans-serif;
+}
 .navbar {
     box-shadow: 0 5px 5px -5px gray;
 }

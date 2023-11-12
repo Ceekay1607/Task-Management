@@ -1,24 +1,18 @@
 <template>
     <AppHeader :user="user" />
     <div class="page">
-        <header class="d-flex flex-wrap">
+        <header class="d-flex flex-wrap" id="header">
             <h1>MY PROJECTS</h1>
         </header>
         <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-primary d-block"
             data-bs-toggle="modal"
             data-bs-target="#addProjectModal"
         >
             New
         </button>
-        <div
-            data-bs-spy="scroll"
-            data-bs-target=".page"
-            data-bs-offset="0"
-            class="row project"
-            tabindex="0"
-        >
+        <div class="row scroll">
             <ProjectCard
                 v-for="project in projects"
                 :key="project.id"
@@ -37,10 +31,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1
-                        class="modal-title fs-5 fs-2 fw-bold"
+                        class="modal-title fs-2 fw-bold"
                         id="addProjectModalLabel"
                     >
-                        Project Details
+                        Project Information
                     </h1>
                     <button
                         type="button"
@@ -64,22 +58,18 @@ import ProjectAddForm from "@/components/projects/ProjectAddForm.vue";
 
 import { useProjects } from "@/composables/useProjects";
 import { useUsers } from "@/composables/useUsers";
-import { ref } from "vue";
 
 const { retrieveUser } = useUsers();
 const { user } = retrieveUser();
-const isShow = ref(false);
-
-const showForm = () => {
-    isShow.value = true;
-};
 
 const { retrieveProjectsQuery } = useProjects();
 const { projects } = retrieveProjectsQuery();
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+div {
+    font-family: "Poppins", sans-serif;
+}
 
 .page {
     min-width: 400px;
@@ -97,10 +87,12 @@ header {
 .btn {
     width: 80px;
     height: 40px;
-
     margin-bottom: 20px;
 }
-#project {
+
+.scroll {
+    max-height: 75vh;
+    position: relative;
     overflow-y: scroll;
 }
 </style>

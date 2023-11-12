@@ -114,13 +114,10 @@ export default {
 </script>
 
 <style scoped>
-.divider:after,
-.divider:before {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #eee;
+section {
+    font-family: "Poppins", sans-serif;
 }
+
 .h-custom {
     height: calc(100% - 73px);
 }

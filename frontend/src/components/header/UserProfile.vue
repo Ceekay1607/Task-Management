@@ -61,6 +61,10 @@ async function logout() {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+template {
+    font-family: "Poppins", sans-serif;
+}
 .btn-img {
     width: 45px;
     height: 45px;

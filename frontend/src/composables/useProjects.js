@@ -27,8 +27,15 @@ export function useProjects() {
         };
     }
 
+    const createProjectMutation = useMutation({
+        mutationFn: projectsService.createProject,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["project", "create"], data),
+    });
+
     return {
         retrieveProjectsQuery,
         retrieveProjectById,
+        createProject: createProjectMutation.mutate,
     };
 }

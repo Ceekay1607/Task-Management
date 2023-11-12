@@ -1,6 +1,6 @@
 <template>
     <div class="main fixed-top">
-        <AppHeader :user="userInfo" />
+        <AppHeader :user="user" />
         <div>
             <SideBar />
         </div>
@@ -8,29 +8,20 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-
 import AppHeader from "@/components/header/AppHeader.vue";
 import SideBar from "@/components/navigation/SideBar.vue";
-import ProjectForm from "@/components/projects/ProjectEditForm.vue";
-import IssueCard from "@/components/issues/IssueCard.vue";
-
-const $route = useRoute();
 
 import { useUsers } from "@/composables/useUsers";
-import { useProjects } from "@/composables/useProjects";
-import { ref } from "vue";
 
 const { retrieveUser } = useUsers();
-// const { retrieveProjectById } = useProjects();
 
-const projectId = ref($route.params.projectId);
-
-const userInfo = retrieveUser();
-// const project = retrieveProjectById(projectId);
+const { user } = retrieveUser();
 </script>
 
 <style>
+div {
+    font-family: "Poppins", sans-serif;
+}
 .main {
     height: 100%;
 }

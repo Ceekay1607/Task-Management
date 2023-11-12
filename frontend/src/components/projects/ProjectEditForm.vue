@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-8 col-lg-6 col-xl-4">
+    <div class="col-md-8 col-lg-6 col-xl-4 mx-4 my-3">
         <form>
             <div class="d-flex flex-row">
                 <p class="lead fw-normal me-3 fs-2 fw-bold m-1">

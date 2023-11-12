@@ -3,7 +3,7 @@
         <aside id="sidebar" class="vh-100">
             <router-link to="/">
                 <div class="sidebar-logo">
-                    <a href="#" class="text-dark">Project</a>
+                    <a href="#" class="text-dark fs-2">Project</a>
                 </div>
             </router-link>
 
@@ -11,15 +11,15 @@
                 <li class="sidebar-item nav-link">
                     <router-link
                         :to="{ name: 'board' }"
-                        class="sidebar-link text-dark"
+                        class="sidebar-link text-dark fs-5"
                     >
-                        Issues
+                        Dashboard
                     </router-link>
                 </li>
                 <li class="sidebar-item nav-link">
                     <router-link
                         :to="{ name: 'editProject' }"
-                        class="sidebar-link text-dark"
+                        class="sidebar-link text-dark fs-5"
                     >
                         Settings
                     </router-link>
@@ -34,8 +34,6 @@
 // const props = defineProps({
 //     project: { type: Object, require: true },
 // });
-
-function board() {}
 </script>
 
 <style scoped>
@@ -62,7 +60,7 @@ li {
 }
 
 .sidebar-logo {
-    padding: 1.15rem 1.5rem;
+    padding: 1.15rem 1.7rem;
 }
 
 .sidebar-logo a {
