@@ -88,7 +88,6 @@ function makeIssuesService() {
             const [newIssueId] = await knex("Issue").insert({
                 projectId,
                 number: nextIssueNumber,
-                projectId: issue.priorityId,
                 categoryId: issue.categoryId,
                 priorityId: issue.priorityId,
                 name: issue.name,
@@ -230,7 +229,8 @@ function makeIssuesService() {
                         .leftJoin("User", "Issue.assigneeId", "User.id")
                         .leftJoin("Project", "Issue.projectId", "Project.id")
                         .where("issue.number", number)
-                        .where("project.id", projectId);
+                        .where("project.id", projectId)
+                        .first();
 
                     return issue;
                 })
@@ -327,10 +327,14 @@ function makeIssuesService() {
                 name,
                 description,
                 categoryId,
-                reporterId,
-                assigneeId,
+                reporterEmail,
+                assigneeEmail,
                 priorityId,
             } = payload;
+
+            // Get user IDs for reporter and assignee emails
+            const reporterId = await getUserIdByEmail(reporterEmail);
+            const assigneeId = await getUserIdByEmail(assigneeEmail);
 
             // Prepare the update object with non-null values
             const updateObject = {};
