@@ -33,16 +33,15 @@
             />
         </div>
 
-        <button type="submit" class="btn btn-primary">Add</button>
+        <div class="d-flex align-items-center justify-content-center">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
     </form>
 </template>
 
 <script setup>
 import { useProjects } from "@/composables/useProjects";
-import { useRoute } from "vue-router";
 import { ref } from "vue";
-
-const $route = useRoute();
 
 const { createProject } = useProjects();
 
@@ -80,7 +79,7 @@ function onCreateProject() {
 </script>
 
 <style>
-template {
-    font-family: "Poppins", sans-serif;
+.btn {
+    width: 100px;
 }
 </style>

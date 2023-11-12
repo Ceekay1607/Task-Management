@@ -3,7 +3,7 @@
         <aside id="sidebar" class="vh-100">
             <router-link to="/">
                 <div class="sidebar-logo">
-                    <a href="#" class="text-dark fs-2">Project</a>
+                    <a href="#" class="text-dark fs-3">Project</a>
                 </div>
             </router-link>
 

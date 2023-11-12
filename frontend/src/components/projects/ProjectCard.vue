@@ -21,7 +21,9 @@
                     </div>
                     <div class="cta-section">
                         <div class=""></div>
-                        <a href="#" class="btn btn-danger">Delete</a>
+                        <button class="btn btn-danger" @click="onDeleteProject">
+                            Delete
+                        </button>
                     </div>
                 </div>
             </div>
@@ -31,10 +33,21 @@
 
 <script setup>
 import { ref } from "vue";
+import { useProjects } from "@/composables/useProjects";
+
+const { deleteProject } = useProjects();
 
 const { project } = defineProps({
     project: { type: Object, required: true },
 });
+
+function onDeleteProject() {
+    const message = "Do you want to remove " + project.projectName + "?";
+    if (confirm(message)) {
+        const response = deleteProject(project.projectId);
+        window.location.reload();
+    }
+}
 </script>
 
 <style scoped>

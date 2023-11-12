@@ -33,9 +33,16 @@ export function useProjects() {
             queryClient.setQueriesData(["project", "create"], data),
     });
 
+    const deleteProjectMutation = useMutation({
+        mutationFn: projectsService.deleteProject,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["project", "delete"], data),
+    });
+
     return {
         retrieveProjectsQuery,
         retrieveProjectById,
         createProject: createProjectMutation.mutate,
+        deleteProject: deleteProjectMutation.mutate,
     };
 }

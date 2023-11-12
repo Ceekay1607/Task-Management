@@ -1,14 +1,17 @@
 <template>
     <div class="navbar fixed-top navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img
-                    :src="projectLogo"
-                    alt="Logo"
-                    width="50"
-                    height="50"
-                    class="d-inline-block"
-                />
+            <a class="navbar-brand fs-3 fw-bold" href="#">
+                <router-link :to="{ name: 'project' }">
+                    <img
+                        :src="projectLogo"
+                        alt="Logo"
+                        width="50"
+                        height="50"
+                        class="d-inline-block"
+                    />
+                </router-link>
+
                 <span style="margin-left: 10px">Panda project</span>
             </a>
 
