@@ -1,15 +1,20 @@
 <template>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+    <div class="col-xl-4 col-lg-6 col-md-12">
         <router-link
             style="text-decoration: none; color: inherit"
             :to="{ name: 'issues', params: { projectId: project.projectId } }"
         >
             <div class="card dark mb-5">
-                <img
-                    :src="project.projectImage || '/images/default-project.png'"
-                    class="card-img-top"
-                    alt="..."
-                />
+                <div class="image-container">
+                    <img
+                        :src="
+                            project.projectImage ||
+                            '/images/default-project.png'
+                        "
+                        class="card-img-top"
+                        alt="..."
+                    />
+                </div>
                 <div class="card-body">
                     <div class="text-section">
                         <h5 class="card-title fw-bold">
@@ -39,7 +44,7 @@ const { project } = defineProps({
 
 <style scoped>
 .card {
-    max-width: 30em;
+    min-width: 20em;
     flex-direction: row;
     position: relative;
     overflow: hidden;
@@ -53,25 +58,33 @@ const { project } = defineProps({
     border: 2px solid #007bff;
 }
 
+.image-container {
+    width: 30%; /* Ajust the width as needed */
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 30%; /* Keep it square */
+}
+
 .card img {
-    width: 25%;
-    height: auto;
-    padding: 0.5em;
-    border-radius: 0.7em;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     object-fit: cover;
     transition: transform 0.2s;
 }
 
 .card-body {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    max-height: 250px;
-    overflow: hidden;
+    height: 100%;
+    flex-grow: 1; /* Allow the body to grow */
 }
 
 .text-section {
-    max-width: 60%;
+    max-width: 100%;
     overflow-y: auto;
 }
 
@@ -89,25 +102,28 @@ const { project } = defineProps({
 }
 
 .cta-section {
-    max-width: 40%;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content: space-between;
 }
 
 .cta-section .btn {
+    margin-top: auto;
     padding: 0.2em 0.5em;
     font-size: 1em;
     color: #fff;
 }
 
-@media screen and (max-width: 475px) {
+@media screen and (max-width: 575px) {
     .card-title {
         font-size: 1em;
     }
 
     .card-text {
+        font-size: 0.8em;
+    }
+
+    .cta-section .btn {
         font-size: 0.8em;
     }
 }

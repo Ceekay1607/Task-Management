@@ -97,9 +97,20 @@ header {
 .btn {
     width: 80px;
     height: 40px;
-
     margin-bottom: 20px;
 }
+
+.project {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.project .col-xl-4 {
+    margin-bottom: 20px;
+    flex: 0 0 calc(33.33% - 20px); /* 33.33% width with 20px margin */
+}
+
 #project {
     overflow-y: scroll;
 }

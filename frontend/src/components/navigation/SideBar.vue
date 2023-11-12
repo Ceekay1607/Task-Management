@@ -12,6 +12,13 @@
                     <router-link
                         :to="{ name: 'board' }"
                         class="sidebar-link text-dark"
+                        :class="{
+                            active:
+                                $route.name === 'board' ||
+                                ($route.name === 'issues' &&
+                                    $route.params &&
+                                    $route.params.pathMatch),
+                        }"
                     >
                         Issues
                     </router-link>
@@ -20,6 +27,7 @@
                     <router-link
                         :to="{ name: 'editProject' }"
                         class="sidebar-link text-dark"
+                        :class="{ active: $route.name === 'editProject' }"
                     >
                         Settings
                     </router-link>
@@ -31,11 +39,9 @@
 </template>
 
 <script setup>
-// const props = defineProps({
-//     project: { type: Object, require: true },
-// });
+import { useRoute } from "vue-router";
 
-function board() {}
+const $route = useRoute();
 </script>
 
 <style scoped>
