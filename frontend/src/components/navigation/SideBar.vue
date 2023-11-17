@@ -51,11 +51,12 @@ li {
 
 .sidebar-item:hover {
     background-color: rgb(218, 218, 218);
-    margin-right: -5%;
+    margin-right: -10px;
 }
 
 #sidebar {
     width: 260px;
+    margin-left: -10px;
     box-shadow: 5px 0 5px -5px gray;
 }
 

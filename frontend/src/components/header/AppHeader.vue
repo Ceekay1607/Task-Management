@@ -2,7 +2,11 @@
     <div class="navbar fixed-top navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand fs-3 fw-bold" href="#">
-                <router-link :to="{ name: 'project' }">
+                <router-link
+                    :to="{ name: 'project' }"
+                    class="text-dark"
+                    style="text-decoration: none"
+                >
                     <img
                         :src="projectLogo"
                         alt="Logo"
@@ -10,9 +14,8 @@
                         height="50"
                         class="d-inline-block"
                     />
+                    Panda project
                 </router-link>
-
-                <span style="margin-left: 10px">Panda project</span>
             </a>
 
             <div>

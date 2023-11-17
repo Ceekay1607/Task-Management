@@ -23,7 +23,13 @@ async function createProject(req, res, next) {
         return res.send(project);
     } catch (error) {
         console.error(error);
-        return next(error);
+
+        return res.status(error.statusCode || 500).json({
+            error: {
+                message: error.message || "Internal Server Error",
+                statusCode: error.statusCode || 500,
+            },
+        });
     }
 }
 
@@ -34,8 +40,14 @@ async function retrieveProject(req, res, next) {
 
         return res.send(project);
     } catch (e) {
-        console.log(e);
-        return next(e);
+        console.error(error);
+
+        return res.status(error.statusCode || 500).json({
+            error: {
+                message: error.message || "Internal Server Error",
+                statusCode: error.statusCode || 500,
+            },
+        });
     }
 }
 
@@ -62,6 +74,27 @@ async function retrieveAllProjects(req, res, next) {
     }
 }
 
+async function updateProject(req, res, next) {
+    try {
+        const projectsService = makeProjectsService();
+        const updated = await projectsService.updateProject(
+            req.params.id,
+            req.body
+        );
+        console.log(updated);
+        return res.send({ message: "Project was updated successfully" });
+    } catch (error) {
+        console.error(error);
+
+        return res.status(error.statusCode || 500).json({
+            error: {
+                message: error.message || "Internal Server Error",
+                statusCode: error.statusCode || 500,
+            },
+        });
+    }
+}
+
 async function deleteProject(req, res, next) {
     try {
         const projectsService = makeProjectsService();
@@ -69,8 +102,14 @@ async function deleteProject(req, res, next) {
 
         return res.send(project);
     } catch (e) {
-        console.log(e);
-        return next(e);
+        console.error(error);
+
+        return res.status(error.statusCode || 500).json({
+            error: {
+                message: error.message || "Internal Server Error",
+                statusCode: error.statusCode || 500,
+            },
+        });
     }
 }
 
@@ -78,5 +117,6 @@ module.exports = {
     createProject,
     retrieveProject,
     retrieveAllProjects,
+    updateProject,
     deleteProject,
 };

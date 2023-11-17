@@ -56,10 +56,6 @@
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-lg"
-                                style="
-                                    padding-left: 2.5rem;
-                                    padding-right: 2.5rem;
-                                "
                             >
                                 Login
                             </button>
@@ -79,7 +75,6 @@
 
 <script>
 import loginService from "@/service/auth.service";
-import loginImage from "@/assets/image/loginPage.webp";
 
 export default {
     data() {

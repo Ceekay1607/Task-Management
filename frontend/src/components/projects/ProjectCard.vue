@@ -1,10 +1,13 @@
 <template>
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+    <div class="col-12 col-md-6 col-lg-4">
         <router-link
             style="text-decoration: none; color: inherit"
-            :to="{ name: 'issues', params: { projectId: project.projectId } }"
+            :to="{
+                name: 'issues',
+                params: { projectId: project.projectId },
+            }"
         >
-            <div class="card dark mb-5">
+            <div class="card dark">
                 <img
                     :src="project.projectImage || '/images/default-project.png'"
                     class="card-img-top"
@@ -19,20 +22,18 @@
                             {{ project.projectDescription }}
                         </p>
                     </div>
-                    <div class="cta-section">
-                        <div class=""></div>
-                        <button class="btn btn-danger" @click="onDeleteProject">
-                            Delete
-                        </button>
-                    </div>
                 </div>
             </div>
         </router-link>
+
+        <button class="btn btn-danger mb-4 my-1" @click="onDeleteProject">
+            Delete
+        </button>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useProjects } from "@/composables/useProjects";
 
 const { deleteProject } = useProjects();
@@ -41,18 +42,17 @@ const { project } = defineProps({
     project: { type: Object, required: true },
 });
 
-function onDeleteProject() {
+const onDeleteProject = () => {
     const message = "Do you want to remove " + project.projectName + "?";
     if (confirm(message)) {
         const response = deleteProject(project.projectId);
         window.location.reload();
     }
-}
+};
 </script>
 
 <style scoped>
 .card {
-    max-width: 30em;
     flex-direction: row;
     position: relative;
     overflow: hidden;

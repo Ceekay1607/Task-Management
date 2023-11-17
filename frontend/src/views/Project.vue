@@ -1,6 +1,6 @@
 <template>
     <AppHeader :user="user" />
-    <div class="page">
+    <div class="page container-fluid">
         <header class="d-flex flex-wrap" id="header">
             <h1>MY PROJECTS</h1>
         </header>
@@ -12,7 +12,7 @@
         >
             New
         </button>
-        <div class="row scroll">
+        <div class="row scroll pt-3">
             <ProjectCard
                 v-for="project in projects"
                 :key="project.id"
@@ -49,6 +49,38 @@
             </div>
         </div>
     </div>
+
+    <!-- <div
+        class="modal fade"
+        id="deleteProjectModal"
+        aria-labelledby="deleteProjectModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p
+                        class="modal-title fs-3 fw-bold"
+                        id="addProjectModalLabel"
+                    >
+                        Delete project
+                    </p>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete this project ?
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
 </template>
 
 <script setup>
