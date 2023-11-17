@@ -16,7 +16,7 @@
 <script setup>
 import IssueList from "@/components/issues/IssueList.vue";
 import InputSearch from "../common/InputSearch.vue";
-import { ref, computed, watch, defineEmits } from "vue";
+import { ref, computed, watch } from "vue";
 
 const searchText = ref("");
 

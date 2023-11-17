@@ -15,7 +15,6 @@
 <script setup>
 import AppHeader from "@/components/header/AppHeader.vue";
 import SideBar from "@/components/navigation/SideBar.vue";
-
 import { useUsers } from "@/composables/useUsers";
 
 const { retrieveUser } = useUsers();
