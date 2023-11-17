@@ -30,12 +30,6 @@
     </div>
 </template>
 
-<script setup>
-// const props = defineProps({
-//   project: { type: Object, require: true },
-// });
-</script>
-
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 

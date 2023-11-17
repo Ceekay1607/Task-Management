@@ -47,6 +47,7 @@ const $emit = defineEmits(["selectedIssue"]);
     border-radius: 10px;
     background-color: #ececec;
     border: none;
+    height: 60vh;
 }
 
 .list-container {
