@@ -2,15 +2,15 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-7">
-                <div class="mb-5">
+                <div class="mb-2">
                     <InputSearch v-model="searchText" />
                     <button
                         type="button"
-                        class="btn btn-primary d-block my-2"
+                        class="btn d-block mt-5"
                         data-bs-toggle="modal"
                         data-bs-target="#addIssueModal"
                     >
-                        New
+                        <i class="fa-solid fa-plus me-2"></i>New
                     </button>
                 </div>
                 <IssueLists
@@ -78,3 +78,14 @@ function getIssue(issue) {
     selectedIssue.value = issue;
 }
 </script>
+
+<style scoped>
+.btn {
+    color: #fff;
+    background-color: #00a9ff;
+}
+
+.btn:hover {
+    background-color: #89cff3;
+}
+</style>

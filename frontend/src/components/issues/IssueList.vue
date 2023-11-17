@@ -5,9 +5,6 @@
                 class="card-header d-flex justify-content-between align-items-center"
             >
                 <h2 class="h5">{{ category?.name || "Loading" }}</h2>
-                <a class="btn btn-link">
-                    <i class="fas fa-plus"></i>
-                </a>
             </div>
             <div class="card-body custom-card-body list-container">
                 <div v-for="issue in issues" :key="issue.id" class="issue-card">

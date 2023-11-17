@@ -5,7 +5,12 @@
                 <div class="col-md-12">
                     <div class="d-flex justify-content-between first-row">
                         <div class="d-flex">
-                            <label class="me-2">#</label>
+                            <label class="me-2"
+                                ><i
+                                    class="fa-solid fa-square-check me-1"
+                                    style="color: #39a7ff"
+                                ></i
+                            ></label>
                             <span>{{ issue.number }}</span>
                         </div>
                         <a href="#" @click="closeIssue"
