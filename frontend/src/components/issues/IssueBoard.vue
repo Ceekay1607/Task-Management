@@ -1,10 +1,20 @@
 <template>
     <div class="container mt-4">
-        <IssueLists
-            v-if="categories && issuesByCategory"
-            :categories="categories"
-            :issues-by-category="issuesByCategory"
-        />
+        <div class="row">
+            <div class="col-md-7">
+                <IssueLists
+                    v-if="categories && issuesByCategory"
+                    :categories="categories"
+                    :issues-by-category="issuesByCategory"
+                    @selectedIssue="getIssue($event)"
+                />
+            </div>
+            <div class="col-md-5">
+                <div v-if="selectedIssueDetail">
+                    <IssueDetail :issue="selectedIssueDetail" />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -13,6 +23,7 @@ import { ref, computed, onMounted } from "vue";
 import { useCategories } from "@/composables/useCategories";
 import { useIssues } from "@/composables/useIssues";
 import IssueLists from "@/components/issues/IssueLists.vue";
+import IssueDetail from "./IssueDetail.vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -43,10 +54,19 @@ const categorizeIssues = (issues, categories) => {
     return categorized;
 };
 
-onMounted(() => {
-    // Log data after it has been fetched
-    console.log("categories:", categories.value);
-    console.log("issues:", issues.value);
-    console.log("issuesByCategory:", issuesByCategory.value);
+const selectedIssue = ref(null);
+
+const selectedIssueDetail = computed(() => {
+    if (selectedIssue.value === null) return null;
+    return selectedIssue.value;
 });
+
+// console.log(
+//     "selectedIssueDetail: " + JSON.stringify(selectedIssueDetail.value)
+// );
+
+function getIssue(issue) {
+    selectedIssue.value = issue;
+    // console.log("selected: " + JSON.stringify(selectedIssue.value));
+}
 </script>

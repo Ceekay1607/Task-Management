@@ -1,38 +1,38 @@
 <template>
     <div class="row flex-nowrap main-page">
-        <aside id="sidebar" class="vh-100">
+        <aside id="sidebar" class="col-md-2 vh-100 bg-light">
             <router-link to="/">
                 <div class="sidebar-logo">
                     <a href="#" class="text-dark fs-3">Project</a>
                 </div>
             </router-link>
 
-            <ul class="sidebar-nav nav-tabs">
-                <li class="sidebar-item nav-link">
+            <ul class="nav flex-column nav-tabs">
+                <li class="nav-item">
                     <router-link
                         :to="{ name: 'board' }"
-                        class="sidebar-link text-dark fs-5"
+                        class="nav-link text-dark fs-5"
                     >
                         Dashboard
                     </router-link>
                 </li>
-                <li class="sidebar-item nav-link">
+                <li class="nav-item">
                     <router-link
                         :to="{ name: 'editProject' }"
-                        class="sidebar-link text-dark fs-5"
+                        class="nav-link text-dark fs-5"
                     >
                         Settings
                     </router-link>
                 </li>
             </ul>
         </aside>
-        <router-view />
+        <router-view class="col-md-10" />
     </div>
 </template>
 
 <script setup>
 // const props = defineProps({
-//     project: { type: Object, require: true },
+//   project: { type: Object, require: true },
 // });
 </script>
 
@@ -68,11 +68,11 @@ li {
     font-weight: 600;
 }
 
-.sidebar-nav {
+.nav {
     padding: 0;
 }
 
-a.sidebar-link {
+a.nav-link {
     padding: 0.625rem 1.625rem;
     display: block;
     font-size: 1rem;

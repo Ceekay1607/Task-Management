@@ -1,17 +1,28 @@
 <template>
-    <div class="card mb-3">
-        <div class="card-body">
+    <div class="card mb-3" @click="handleClick">
+        <div class="card-body text-center">
             <h5 class="card-title">{{ issue.name }}</h5>
-            <p class="card-text">{{ issue.description }}</p>
-            <!-- Add more details as needed -->
         </div>
     </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 
-const { issue } = defineProps({
+const props = defineProps({
     issue: { type: Object, required: true },
 });
+
+const emits = defineEmits();
+
+const handleClick = () => {
+    emits("issue-clicked", props.issue);
+};
 </script>
+
+<style scoped>
+.card:hover {
+    cursor: pointer;
+    background-color: rgb(191, 223, 245);
+}
+</style>

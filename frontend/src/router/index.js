@@ -8,7 +8,6 @@ const routes = [
         path: "/",
         name: "project",
         component: () => import("../views/Project.vue"),
-        // Thêm navigation guard dưới đây
         meta: { requiresAuth: true },
     },
     {
