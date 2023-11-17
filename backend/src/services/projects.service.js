@@ -88,11 +88,18 @@ function makeProjectsService() {
                     continue;
                 }
 
+                const isMember = await knex("projectuser")
+                    .select("*")
+                    .where("userId", member.id)
+                    .where("projectId", projectId);
                 // Add member to the ProjectUser table
-                await knex("ProjectUser").insert({
-                    projectId,
-                    userId: member.id,
-                });
+                if (!isMember) {
+                    // Add member to the ProjectUser table
+                    await knex("ProjectUser").insert({
+                        projectId: projectId,
+                        userId: member.id,
+                    });
+                }
             } catch (error) {
                 console.error(
                     `Error processing email ${email}: ${error.message}`
@@ -245,6 +252,40 @@ function makeProjectsService() {
     }
 
     /**
+     *
+     * @param {*} id
+     * @param {*} payload
+     * @returns
+     */
+
+    async function updateProject(projectId, payload) {
+        try {
+            const project = {
+                name: payload.name,
+                description: payload.description,
+            };
+            const updated = await knex("Project")
+                .where("id", projectId)
+                .update(project);
+
+            if (
+                payload.memberEmails &&
+                Array.isArray(payload.memberEmails) &&
+                payload.memberEmails.length > 0
+            ) {
+                // Add other members to the ProjectUser table
+                await handleProjectMembers(projectId, payload.memberEmails);
+            }
+
+            return updated;
+        } catch (error) {
+            console.error(error);
+            // Rethrow the error or handle it accordingly
+            throw new ApiError(500, "Internal Server Error");
+        }
+    }
+
+    /**
      * Delete project by ID
      *
      * @param {*} projectId
@@ -277,6 +318,7 @@ function makeProjectsService() {
         createProject,
         retrieveProject,
         retrieveProjectsBelongToUser,
+        updateProject,
         deleteProject,
     };
 }

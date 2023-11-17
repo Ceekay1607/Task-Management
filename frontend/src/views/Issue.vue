@@ -1,5 +1,5 @@
 <template>
-    <div class="main fixed-top">
+    <div class="main fixed-top container-fluid">
         <AppHeader :user="user" />
         <div class="container-fluid">
             <div class="row">

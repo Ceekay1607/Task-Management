@@ -23,13 +23,14 @@
         </div>
 
         <div class="form-outline mb-3">
-            <label class="form-label" for="email">Members Emails</label>
+            <label class="form-label" for="email"
+                >Members Emails <i>(separated by comma ",")</i></label
+            >
             <input
                 type="text"
                 id="email"
                 class="form-control"
                 v-model="email"
-                required
             />
         </div>
 
