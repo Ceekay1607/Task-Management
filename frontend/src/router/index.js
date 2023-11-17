@@ -30,7 +30,7 @@ const routes = [
             {
                 path: "board",
                 name: "board",
-                component: () => import("../components/issues/IssueCard.vue"),
+                component: () => import("../components/issues/IssueBoard.vue"),
             },
             {
                 path: "editProject",

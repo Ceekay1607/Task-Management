@@ -1,22 +1,16 @@
 function makeIssueService() {
-    const baseUrl = "/api/project/:project-number/issue";
+    const baseUrl = "/api/project";
     const headers = {
         "Content-type": "application/json",
     };
 
-    async function getProjects() {
-        let url = `${baseUrl}`;
-        return await fetch(url).then((res) => res.json());
-    }
-
-    async function getProjectById(id) {
-        let url = `${baseUrl}/${id}`;
+    async function getIssues(projectId) {
+        let url = `${baseUrl}/${projectId.value}/issue`;
         return await fetch(url).then((res) => res.json());
     }
 
     return {
-        getProjects,
-        getProjectById,
+        getIssues,
     };
 }
 

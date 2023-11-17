@@ -5,5 +5,16 @@ import { computed } from "vue";
 export function useIssues() {
     const queryClient = useQueryClient();
 
-    return {};
+    function retrieveIssues(projectId) {
+        const { data: issues } = useQuery({
+            queryKey: ["issues"],
+            queryFn: () => issueService.getIssues(projectId),
+        });
+
+        return {
+            issues,
+        };
+    }
+
+    return { retrieveIssues };
 }

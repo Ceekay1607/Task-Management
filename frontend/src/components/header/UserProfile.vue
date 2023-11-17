@@ -24,7 +24,7 @@
             </li>
 
             <li>
-                <span>{{ user.name }}</span>
+                <span>{{ user?.name || "Loading..." }}</span>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
