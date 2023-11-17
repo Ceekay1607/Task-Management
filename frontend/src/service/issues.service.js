@@ -11,10 +11,19 @@ function makeIssueService() {
 
     async function createIssue(issue) {
         let url = `${baseUrl}/${issue.projectId}/issue`;
-        console.log(url);
-        console.log(issue);
         const response = await fetch(url, {
             method: "POST",
+            headers,
+            body: JSON.stringify(issue),
+        }).then((res) => res.json());
+        console.log(response);
+        return response;
+    }
+
+    async function updateIssue(issue) {
+        let url = `${baseUrl}/${issue.projectId}/issue/${issue.number}`;
+        const response = await fetch(url, {
+            method: "PUT",
             headers,
             body: JSON.stringify(issue),
         }).then((res) => res.json());
@@ -25,6 +34,7 @@ function makeIssueService() {
     return {
         getIssues,
         createIssue,
+        updateIssue,
     };
 }
 

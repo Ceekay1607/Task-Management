@@ -27,7 +27,7 @@
         </router-link>
 
         <button class="btn btn-danger mb-4 my-1" @click="onDeleteProject">
-            Delete
+            <i class="fa-solid fa-trash"></i> Delete
         </button>
     </div>
 </template>

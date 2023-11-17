@@ -1,13 +1,8 @@
 <template>
-    <div class="col-md-4">
+    <div class="col">
         <div class="card mb-4 custom-card">
-            <div
-                class="card-header d-flex justify-content-between align-items-center"
-            >
+            <div class="card-header text-center">
                 <h2 class="h5">{{ category?.name || "Loading" }}</h2>
-                <a class="btn btn-link">
-                    <i class="fas fa-plus"></i>
-                </a>
             </div>
             <div class="card-body custom-card-body list-container">
                 <div v-for="issue in issues" :key="issue.id" class="issue-card">

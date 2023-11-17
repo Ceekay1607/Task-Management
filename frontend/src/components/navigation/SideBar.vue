@@ -13,7 +13,7 @@
                         :to="{ name: 'board' }"
                         class="nav-link text-dark fs-5"
                     >
-                        Dashboard
+                        <i class="fa-solid fa-table-columns"></i> Dashboard
                     </router-link>
                 </li>
                 <li class="nav-item">
@@ -21,7 +21,7 @@
                         :to="{ name: 'editProject' }"
                         class="nav-link text-dark fs-5"
                     >
-                        Settings
+                        <i class="fa-solid fa-sliders"></i> Settings
                     </router-link>
                 </li>
             </ul>
