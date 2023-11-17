@@ -1,18 +1,18 @@
 <template>
     <AppHeader :user="user" />
     <div class="page container-fluid">
-        <header class="d-flex flex-wrap" id="header">
+        <header class="d-flex flex-wrap ms-2" id="header">
             <h1>MY PROJECTS</h1>
         </header>
         <button
             type="button"
-            class="btn btn-primary d-block"
+            class="btn btn-primary d-block ms-2"
             data-bs-toggle="modal"
             data-bs-target="#addProjectModal"
         >
             <i class="fa-solid fa-plus"></i> New
         </button>
-        <div class="row scroll pt-3">
+        <div class="row scroll pt-3 ps-2">
             <ProjectCard
                 v-for="project in projects"
                 :key="project.id"
