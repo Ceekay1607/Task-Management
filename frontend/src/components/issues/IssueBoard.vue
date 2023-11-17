@@ -61,12 +61,10 @@ const selectedIssueDetail = computed(() => {
     return selectedIssue.value;
 });
 
-// console.log(
-//     "selectedIssueDetail: " + JSON.stringify(selectedIssueDetail.value)
-// );
+// console.log("selectedIssueDetail: " + JSON.stringify(selectedIssueDetail));
 
 function getIssue(issue) {
     selectedIssue.value = issue;
-    // console.log("selected: " + JSON.stringify(selectedIssue.value));
+    console.log("selected: " + JSON.stringify(selectedIssue.value));
 }
 </script>

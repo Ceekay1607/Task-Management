@@ -9,6 +9,11 @@ function makeIssueService() {
         return await fetch(url).then((res) => res.json());
     }
 
+    async function getIssues(projectId) {
+        let url = `${baseUrl}/${projectId.value}/issue`;
+        return await fetch(url).then((res) => res.json());
+    }
+
     return {
         getIssues,
     };
