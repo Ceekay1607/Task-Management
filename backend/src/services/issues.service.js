@@ -10,15 +10,29 @@ function makeIssuesService() {
         return user ? user.id : null;
     }
 
+    function getCategoryId(category) {
+        if (!category) return 1;
+        else {
+            return knex("Category").select("id").where("name", category);
+        }
+    }
+
+    function getPriorityId(priority) {
+        if (!priority) return 1;
+        else {
+            return knex("Priority").select("id").where("name", priority);
+        }
+    }
+
     function readIssue(payload) {
         const issue = {
             projectId: payload.projectId,
-            categoryId: payload?.categoryId ?? 1,
+            categoryId: getCategoryId(payload.category),
             name: payload.name,
             description: payload.description,
             reporterEmail: payload.reporterEmail,
             assigneeEmail: payload.assigneeEmail,
-            priorityId: payload?.priorityId ?? 1,
+            priorityId: getPriorityId(payload.priority),
         };
 
         Object.keys(issue).forEach(

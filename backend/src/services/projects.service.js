@@ -145,7 +145,7 @@ function makeProjectsService() {
 
             // Retrieve members associated with the project
             const members = await knex("ProjectUser")
-                .select("User.name as memberName", "User.email as memberEmail")
+                .select("User.email as memberEmail")
                 .leftJoin("User", "ProjectUser.userId", "User.id")
                 .where("ProjectUser.projectId", projectId);
 

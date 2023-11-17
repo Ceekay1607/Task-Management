@@ -2,6 +2,17 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-7">
+                <div class="mb-2">
+                    <InputSearch v-model="searchText" />
+                    <button
+                        type="button"
+                        class="btn d-block mt-5"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addIssueModal"
+                    >
+                        <i class="fa-solid fa-plus me-2"></i>New
+                    </button>
+                </div>
                 <IssueLists
                     v-if="categories && issuesByCategory"
                     :categories="categories"
@@ -24,6 +35,7 @@ import { useCategories } from "@/composables/useCategories";
 import { useIssues } from "@/composables/useIssues";
 import IssueLists from "@/components/issues/IssueLists.vue";
 import IssueDetail from "./IssueDetail.vue";
+import InputSearch from "../common/InputSearch.vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -34,6 +46,7 @@ const { retrieveIssues } = useIssues();
 
 const { categories } = retrieveCategories();
 const { issues } = retrieveIssues(projectId);
+const searchText = ref("");
 
 const issuesByCategory = computed(() => {
     if (categories.value && issues.value) {
@@ -61,12 +74,18 @@ const selectedIssueDetail = computed(() => {
     return selectedIssue.value;
 });
 
-// console.log(
-//     "selectedIssueDetail: " + JSON.stringify(selectedIssueDetail.value)
-// );
-
 function getIssue(issue) {
     selectedIssue.value = issue;
-    // console.log("selected: " + JSON.stringify(selectedIssue.value));
 }
 </script>
+
+<style scoped>
+.btn {
+    color: #fff;
+    background-color: #00a9ff;
+}
+
+.btn:hover {
+    background-color: #89cff3;
+}
+</style>

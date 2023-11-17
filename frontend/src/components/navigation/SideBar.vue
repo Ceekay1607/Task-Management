@@ -12,16 +12,20 @@
                     <router-link
                         :to="{ name: 'board' }"
                         class="nav-link text-dark fs-5"
+                        active-class="router-link-active"
                     >
-                        Dashboard
+                        <i class="fa-solid fa-table-columns margin-right"></i>
+                        <span class="nav-text">Dashboard</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link
                         :to="{ name: 'editProject' }"
                         class="nav-link text-dark fs-5"
+                        active-class="router-link-active"
                     >
-                        Settings
+                        <i class="fa-solid fa-gear margin-right"></i>
+                        <span class="nav-text">Settings</span>
                     </router-link>
                 </li>
             </ul>
@@ -29,12 +33,6 @@
         <router-view class="col-md-10" />
     </div>
 </template>
-
-<script setup>
-// const props = defineProps({
-//   project: { type: Object, require: true },
-// });
-</script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
@@ -73,9 +71,26 @@ li {
     padding: 0;
 }
 
-a.nav-link {
+.nav-link {
     padding: 0.625rem 1.625rem;
     display: block;
     font-size: 1rem;
+    color: #000; /* Màu chữ mặc định */
+}
+
+.nav-link:hover {
+    background-color: rgb(218, 218, 218);
+}
+
+.router-link-active .nav-text {
+    color: #00a9ff;
+}
+
+.router-link-active i {
+    color: #00a9ff;
+}
+
+.margin-right {
+    margin-right: 1em;
 }
 </style>

@@ -1,7 +1,4 @@
 <template>
-    <div class="mt-3 mb-5">
-        <InputSearch v-model="searchText" />
-    </div>
     <div class="row">
         <IssueList
             v-for="category in categories"
@@ -15,10 +12,8 @@
 
 <script setup>
 import IssueList from "@/components/issues/IssueList.vue";
-import InputSearch from "../common/InputSearch.vue";
-import { ref, computed, watch } from "vue";
 
-const searchText = ref("");
+import { ref, computed, watch } from "vue";
 
 const $emit = defineEmits(["selectedIssue"]);
 
