@@ -23,7 +23,6 @@
 
 <script setup>
 import IssueCard from "@/components/issues/IssueCard.vue";
-import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
     category: { type: Object, required: true },
