@@ -97,11 +97,33 @@ function makeIssuesService() {
             });
 
             // Retrieve the created issue
-            const createdIssue = {
-                id: newIssueId,
-                number: nextIssueNumber,
-                ...issue,
-            };
+            const createdIssue = await knex("Issue")
+                .select(
+                    "Issue.id",
+                    "Issue.number",
+                    "Issue.name",
+                    "Issue.description",
+                    "Category.name as categoryName",
+                    "UserReporter.name as reporterName",
+                    "UserAssignee.name as assigneeName",
+                    "Priority.name as priorityName",
+                    "Issue.createdAt",
+                    "Issue.updatedAt"
+                )
+                .leftJoin("Category", "Issue.categoryId", "Category.id")
+                .leftJoin(
+                    "User as UserReporter",
+                    "Issue.reporterId",
+                    "UserReporter.id"
+                )
+                .leftJoin(
+                    "User as UserAssignee",
+                    "Issue.assigneeId",
+                    "UserAssignee.id"
+                )
+                .leftJoin("Priority", "Issue.priorityId", "Priority.id")
+                .where({ "Issue.id": newIssueId })
+                .first();
 
             return createdIssue;
         } catch (error) {
@@ -144,9 +166,7 @@ function makeIssuesService() {
                     "Category.name as categoryName",
                     "UserReporter.name as reporterName",
                     "UserAssignee.name as assigneeName",
-                    "Priority.name as priorityName",
-                    "Issue.createdAt",
-                    "Issue.updatedAt"
+                    "Priority.name as priorityName"
                 )
                 .leftJoin("Category", "Issue.categoryId", "Category.id")
                 .leftJoin(
@@ -213,31 +233,58 @@ function makeIssuesService() {
                 throw new ApiError(404, "Project not found");
             }
 
-            const issueNumbers = await knex("issue")
-                .select("number")
-                .where("issue.projectId", projectId);
+            // Retrieve all issues with detailed information
+            const issues = await knex("Issue")
+                .select(
+                    "Issue.id",
+                    "Issue.number",
+                    "Issue.name",
+                    "Issue.description",
+                    "Category.name as categoryName",
+                    "UserReporter.name as reporterName",
+                    "UserAssignee.name as assigneeName",
+                    "Priority.name as priorityName"
+                )
+                .leftJoin("Category", "Issue.categoryId", "Category.id")
+                .leftJoin(
+                    "User as UserReporter",
+                    "Issue.reporterId",
+                    "UserReporter.id"
+                )
+                .leftJoin(
+                    "User as UserAssignee",
+                    "Issue.assigneeId",
+                    "UserAssignee.id"
+                )
+                .leftJoin("Priority", "Issue.priorityId", "Priority.id")
+                .where({ "Issue.projectId": projectId });
 
-            const issues = await Promise.all(
-                issueNumbers.map(async ({ number }) => {
-                    const issue = await knex("Issue")
+            // Retrieve comments for each issue
+            const issuesWithComments = await Promise.all(
+                issues.map(async (issue) => {
+                    const comments = await knex("Comment")
                         .select(
-                            "User.name as AssigneeName",
-                            "issue.number as Number",
-                            "issue.name as Name",
-                            "issue.description as Description"
+                            "Comment.content",
+                            "User.name as userName",
+                            "User.image as userImage",
+                            "Project.name as projectName",
+                            "Issue.name as issueName"
                         )
-                        .leftJoin("User", "Issue.assigneeId", "User.id")
+                        .leftJoin("User", "Comment.userId", "User.id")
+                        .leftJoin("Issue", "Comment.issueId", "Issue.id")
                         .leftJoin("Project", "Issue.projectId", "Project.id")
-                        .where("issue.number", number)
-                        .where("project.id", projectId)
-                        .first();
+                        .where("Comment.issueId", issue.id);
+
+                    // Attach comments to the issue object
+                    issue.comments = comments;
 
                     return issue;
                 })
             );
 
-            return issues;
+            return issuesWithComments;
         } catch (error) {
+            console.error(error);
             if (error instanceof ApiError) {
                 // Re-throw the ApiError for specific cases
                 throw error;
@@ -322,40 +369,16 @@ function makeIssuesService() {
                 throw new ApiError(404, "Issue not found");
             }
 
-            // Extract fields to update from the payload
-            const {
-                name,
-                description,
-                categoryId,
-                reporterEmail,
-                assigneeEmail,
-                priorityId,
-            } = payload;
-
-            // Get user IDs for reporter and assignee emails
-            const reporterId = await getUserIdByEmail(reporterEmail);
-            const assigneeId = await getUserIdByEmail(assigneeEmail);
-
-            // Prepare the update object with non-null values
-            const updateObject = {};
-            if (name !== undefined) updateObject.name = name;
-            if (description !== undefined)
-                updateObject.description = description;
-            if (categoryId !== undefined) updateObject.categoryId = categoryId;
-            if (reporterId !== undefined) updateObject.reporterId = reporterId;
-            if (assigneeId !== undefined) updateObject.assigneeId = assigneeId;
-            if (priorityId !== undefined) updateObject.priorityId = priorityId;
+            // Create updateIssue object from request data
+            const updateIssue = readIssue({
+                projectId,
+                ...payload,
+            });
 
             // Update the issue
-            await knex("Issue").where({ id: issue.id }).update(updateObject);
+            await knex("Issue").where({ id: issue.id }).update(updateIssue);
 
-            // Retrieve the updated issue
-            const updatedIssue = await knex("Issue")
-                .select("*")
-                .where({ id: issue.id })
-                .first();
-
-            return updatedIssue;
+            return { success: true, message: "Issue updated successfully" };
         } catch (error) {
             console.error(error);
             if (error instanceof ApiError) {

@@ -96,6 +96,7 @@ const { user } = retrieveUser();
 
 const { retrieveProjectsQuery } = useProjects();
 const { projects } = retrieveProjectsQuery();
+// console.log(projects.value);
 </script>
 
 <style scoped>

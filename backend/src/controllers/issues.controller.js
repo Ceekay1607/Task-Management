@@ -65,19 +65,17 @@ async function deleteIssue(req, res, next) {
     }
 }
 
-// Define the controller function
 async function updateIssueController(req, res) {
     try {
         const { projectId, number } = req.params;
         const payload = req.body;
         const issuesService = makeIssuesService();
-        const updatedIssue = await issuesService.updateIssue(
-            projectId,
-            number,
-            payload
-        );
+        await issuesService.updateIssue(projectId, number, payload);
 
-        res.status(200).json(updatedIssue);
+        res.status(200).json({
+            success: true,
+            message: "Issue updated successfully",
+        });
     } catch (error) {
         if (error instanceof ApiError) {
             // Handle specific API errors
