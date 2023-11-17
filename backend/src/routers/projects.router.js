@@ -13,6 +13,7 @@ router
 router
     .route("/:id")
     .get(isAuthenticated, projectsController.retrieveProject)
+    .put(isAuthenticated, projectsController.updateProject)
     .delete(isAuthenticated, projectsController.deleteProject);
 
 module.exports = router;

@@ -1,41 +1,48 @@
 <template>
-    <div class="main fixed-top">
-        <AppHeader :user="userInfo" />
-        <div>
-            <SideBar />
+    <div class="main fixed-top container-fluid">
+        <AppHeader :user="user" />
+        <div class="container-fluid">
+            <div class="row">
+                <SideBar />
+                <div class="col-md-10 main-page">
+                    <router-view />
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-
 import AppHeader from "@/components/header/AppHeader.vue";
 import SideBar from "@/components/navigation/SideBar.vue";
-import ProjectForm from "@/components/projects/ProjectEditForm.vue";
-import IssueCard from "@/components/issues/IssueCard.vue";
-
-const $route = useRoute();
-
 import { useUsers } from "@/composables/useUsers";
-import { useProjects } from "@/composables/useProjects";
-import { ref } from "vue";
 
 const { retrieveUser } = useUsers();
-// const { retrieveProjectById } = useProjects();
 
-const projectId = ref($route.params.projectId);
-
-const userInfo = retrieveUser();
-// const project = retrieveProjectById(projectId);
+const { user } = retrieveUser();
 </script>
 
 <style>
+div {
+    font-family: "Poppins", sans-serif;
+}
+
 .main {
     height: 100%;
 }
 
 .main-page {
     margin-top: 75px;
+}
+
+/* Ensure that the modal backdrop covers the whole page */
+.modal-backdrop {
+    position: fixed;
+    z-index: 1050;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #000; /* or your desired color */
 }
 </style>

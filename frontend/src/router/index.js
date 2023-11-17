@@ -8,7 +8,6 @@ const routes = [
         path: "/",
         name: "project",
         component: () => import("../views/Project.vue"),
-        // Thêm navigation guard dưới đây
         meta: { requiresAuth: true },
     },
     {
@@ -24,12 +23,13 @@ const routes = [
     {
         path: "/project/:projectId",
         name: "issues",
+        redirect: { name: "board" },
         component: () => import("../views/Issue.vue"),
         children: [
             {
-                path: "",
+                path: "board",
                 name: "board",
-                component: () => import("../components/issues/IssueCard.vue"),
+                component: () => import("../components/issues/IssueBoard.vue"),
             },
             {
                 path: "editProject",

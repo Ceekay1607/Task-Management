@@ -1,9 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { useQuery } from "@tanstack/vue-query";
 import issueService from "@/service/issues.service";
 import { computed } from "vue";
 
 export function useIssues() {
-    const queryClient = useQueryClient();
+    function retrieveIssues(projectId) {
+        const { data: issuesArray } = useQuery({
+            queryKey: ["issues", projectId],
+            queryFn: () => issueService.getIssues(projectId),
+        });
 
-    return {};
+        const issues = computed(() => {
+            const tempIssues =
+                issuesArray.value?.map((issue) => ({ ...issue })) ?? [];
+            return tempIssues;
+        });
+
+        return {
+            issues,
+        };
+    }
+
+    return { retrieveIssues };
 }

@@ -56,10 +56,6 @@
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-lg"
-                                style="
-                                    padding-left: 2.5rem;
-                                    padding-right: 2.5rem;
-                                "
                             >
                                 Login
                             </button>
@@ -79,7 +75,6 @@
 
 <script>
 import loginService from "@/service/auth.service";
-import loginImage from "@/assets/image/loginPage.webp";
 
 export default {
     data() {
@@ -114,13 +109,10 @@ export default {
 </script>
 
 <style scoped>
-.divider:after,
-.divider:before {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #eee;
+section {
+    font-family: "Poppins", sans-serif;
 }
+
 .h-custom {
     height: calc(100% - 73px);
 }

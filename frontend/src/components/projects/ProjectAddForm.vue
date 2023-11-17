@@ -1,26 +1,86 @@
 <template>
-    <form>
-        <div class="form-outline mb-4">
+    <form @submit.prevent="onCreateProject">
+        <div class="form-outline mb-3">
             <label class="form-label" for="name">Name</label>
-            <input type="name" id="name" class="form-control" />
+            <input
+                type="text"
+                id="name"
+                class="form-control"
+                v-model="name"
+                required
+            />
         </div>
 
-        <div class="form-outline mb-4">
+        <div class="form-outline mb-3">
             <label class="form-label" for="description">Description</label>
-            <input type="description" id="description" class="form-control" />
+            <input
+                type="text"
+                id="description"
+                class="form-control"
+                v-model="description"
+                required
+            />
         </div>
 
-        <div class="form-outline mb-4">
-            <label class="form-label" for="members">Members</label>
-            <input type="description" id="members" class="form-control" />
+        <div class="form-outline mb-3">
+            <label class="form-label" for="email"
+                >Members Emails <i>(separated by comma ",")</i></label
+            >
+            <input
+                type="text"
+                id="email"
+                class="form-control"
+                v-model="email"
+            />
         </div>
 
-        <button
-            type="submit"
-            class="btn btn-primary"
-            style="padding-left: 2.5rem; padding-right: 2.5rem"
-        >
-            Add
-        </button>
+        <div class="d-flex align-items-center justify-content-center">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
     </form>
 </template>
+
+<script setup>
+import { useProjects } from "@/composables/useProjects";
+import { ref } from "vue";
+
+const { createProject } = useProjects();
+
+const name = ref("");
+const description = ref("");
+const email = ref("");
+const loading = ref(false);
+
+function convertToEmailArray(input) {
+    if (input.includes(",")) {
+        // If the input contains a comma, assume it's a list of emails separated by commas
+        return input.split(",").map((email) => email.trim());
+    } else {
+        // If there's no comma, treat it as a single email
+        return [input.trim()];
+    }
+}
+
+function onCreateProject() {
+    try {
+        loading.value = true;
+        const newProject = {
+            name: name.value,
+            description: description.value,
+            memberEmails: convertToEmailArray(email.value),
+        };
+        const response = createProject(newProject);
+        window.location.reload();
+    } catch (error) {
+        console.log(error);
+    } finally {
+        loading.value = false;
+    }
+}
+</script>
+
+<style>
+.btn {
+    width: 100px;
+}
+</style>

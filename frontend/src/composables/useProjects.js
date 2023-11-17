@@ -18,7 +18,7 @@ export function useProjects() {
 
     function retrieveProjectById(id) {
         const { data: project } = useQuery({
-            queryKey: ["project"],
+            queryKey: ["project", id],
             queryFn: () => projectsService.getProjectById(id),
         });
 
@@ -27,8 +27,29 @@ export function useProjects() {
         };
     }
 
+    const createProjectMutation = useMutation({
+        mutationFn: projectsService.createProject,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["project", "create"], data),
+    });
+
+    const updateProjectMutation = useMutation({
+        mutationFn: projectsService.updateProject,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["project", "update"], data),
+    });
+
+    const deleteProjectMutation = useMutation({
+        mutationFn: projectsService.deleteProject,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["project", "delete"], data),
+    });
+
     return {
         retrieveProjectsQuery,
         retrieveProjectById,
+        createProject: createProjectMutation.mutate,
+        updateProject: updateProjectMutation.mutate,
+        deleteProject: deleteProjectMutation.mutate,
     };
 }
