@@ -1,9 +1,7 @@
 <template>
-    <div class="col-md-4">
+    <div class="col">
         <div class="card mb-4 custom-card">
-            <div
-                class="card-header d-flex justify-content-between align-items-center"
-            >
+            <div class="card-header text-center">
                 <h2 class="h5">{{ category?.name || "Loading" }}</h2>
             </div>
             <div class="card-body custom-card-body list-container">

@@ -28,8 +28,22 @@ export function useIssues() {
             queryClient.setQueriesData(["issue", "create"], data),
     });
 
+    const updateIssueMutation = useMutation({
+        mutationFn: issueService.updateIssue,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["issue", "update"], data),
+    });
+
+    const deleteIssueMutation = useMutation({
+        mutationFn: issueService.deleteIssue,
+        onSuccess: (data) =>
+            queryClient.setQueriesData(["issue", "delete"], data),
+    });
+
     return {
         retrieveIssues,
         createIssue: createIssueMutation.mutate,
+        updateIssue: updateIssueMutation.mutate,
+        deleteIssue: deleteIssueMutation.mutate,
     };
 }

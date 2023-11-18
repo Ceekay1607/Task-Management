@@ -256,7 +256,9 @@ function makeIssuesService() {
                     "Issue.description",
                     "Category.name as categoryName",
                     "UserReporter.name as reporterName",
+                    "UserReporter.email as reporterEmail",
                     "UserAssignee.name as assigneeName",
+                    "UserAssignee.email as assigneeEmail",
                     "Priority.name as priorityName"
                 )
                 .leftJoin("Category", "Issue.categoryId", "Category.id")
@@ -374,23 +376,37 @@ function makeIssuesService() {
             }
 
             // Check if the issue exists
-            const issue = await knex("Issue")
+            const issueExist = await knex("Issue")
                 .select("id")
                 .where({ projectId, number })
                 .first();
 
-            if (!issue) {
+            if (!issueExist) {
                 throw new ApiError(404, "Issue not found");
             }
 
             // Create updateIssue object from request data
-            const updateIssue = readIssue({
+            const issue = readIssue({
                 projectId,
                 ...payload,
             });
 
+            const reporterId = await getUserIdByEmail(issue.reporterEmail);
+            const assigneeId = await getUserIdByEmail(issue.assigneeEmail);
+
+            const updateIssue = {
+                categoryId: issue.categoryId,
+                priorityId: issue.priorityId,
+                name: issue.name,
+                description: issue.description,
+                reporterId,
+                assigneeId,
+            };
+
             // Update the issue
-            await knex("Issue").where({ id: issue.id }).update(updateIssue);
+            await knex("Issue")
+                .where({ id: issueExist.id })
+                .update(updateIssue);
 
             return { success: true, message: "Issue updated successfully" };
         } catch (error) {

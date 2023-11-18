@@ -24,7 +24,7 @@
                         class="nav-link text-dark fs-5"
                         active-class="router-link-active"
                     >
-                        <i class="fa-solid fa-gear margin-right"></i>
+                        <i class="fa-solid fa-sliders margin-right"></i>
                         <span class="nav-text">Settings</span>
                     </router-link>
                 </li>

@@ -10,7 +10,7 @@
             data-bs-toggle="modal"
             data-bs-target="#addProjectModal"
         >
-            New Project
+            <i class="fa-solid fa-plus"></i> New
         </button>
         <div class="row scroll pt-3 ps-2">
             <ProjectCard

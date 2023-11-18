@@ -44,7 +44,9 @@
                     />
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">
+                    Update <i class="fa-regular fa-pen-to-square"></i>
+                </button>
             </form>
         </div>
     </section>

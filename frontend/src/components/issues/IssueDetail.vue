@@ -13,8 +13,8 @@
                             ></label>
                             <span>{{ issue.number }}</span>
                         </div>
-                        <a href="#" @click="closeIssue"
-                            ><i class="fas fa-times"></i
+                        <a href="#" @click="onDeleteIssue"
+                            ><i class="fa-solid fa-trash"></i
                         ></a>
                     </div>
                 </div>
@@ -35,6 +35,9 @@
                             id="issueDescription"
                             v-model="issue.description"
                         ></textarea>
+                    </div>
+                    <div class="mb-3 ms-2">
+                        <span>Reporter: {{ issue.reporterName }}</span>
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -70,25 +73,30 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Assignee:</label>
-                        <span>{{ issue.assigneeName }}</span>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Reporter:</label>
-                        <span>{{ issue.reporterName }}</span>
+                        <label class="form-label">Assignee</label>
+                        <select
+                            class="form-control"
+                            v-model="issue.assigneeEmail"
+                        >
+                            <option
+                                v-for="assignee in members"
+                                :key="assignee.id"
+                                :value="assignee.memberEmail"
+                            >
+                                {{ assignee.memberEmail }}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-center">
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        @click="updateIssue"
-                    >
-                        Accept
-                    </button>
-                </div>
+            <div class="d-flex justify-content-center">
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-lg"
+                    @click="onUpdateIssue"
+                >
+                    <span> Update</span>
+                </button>
             </div>
         </form>
     </div>
@@ -96,21 +104,79 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { useProjects } from "@/composables/useProjects";
+import { useIssues } from "@/composables/useIssues";
 import { useCategories } from "@/composables/useCategories";
 import { usePriorities } from "@/composables/usePriorities";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const projectId = computed(() => route.params.projectId);
 
 const props = defineProps({
     issue: { type: Object, required: true },
 });
+
+const { updateIssue, deleteIssue } = useIssues();
+
+const { retrieveProjectById } = useProjects();
+const { project } = retrieveProjectById(projectId);
+const infoProject = ref({ ...project.value });
+const members = infoProject.value.members;
 
 const { retrieveCategories } = useCategories();
 const { categories } = retrieveCategories();
 
 const { retrievePriorities } = usePriorities();
 const { priorities } = retrievePriorities();
+
+function onUpdateIssue() {
+    try {
+        const update = {
+            projectId: projectId.value,
+            number: props.issue.number,
+            name: props.issue.name,
+            description: props.issue.description,
+            reporterEmail: props.issue.reporterEmail,
+            assigneeEmail: props.issue.assigneeEmail,
+            category: props.issue.categoryName,
+            priority: props.issue.priorityName,
+        };
+
+        const response = updateIssue(update);
+        console.log(update);
+        console.log(response);
+        window.location.reload();
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function onDeleteIssue() {
+    const message =
+        "Do you want to remove issue number " + props.issue.number + "?";
+    if (confirm(message)) {
+        const deleted = {
+            projectId: projectId.value,
+            number: props.issue.number,
+        };
+        const response = deleteIssue(deleted);
+        window.location.reload();
+    }
+}
 </script>
 
 <style scoped>
+textarea {
+    min-height: 2rem;
+}
+
+.first-row a i {
+    color: gray;
+    font-size: 0.5em;
+}
+
 .issue-input {
     border: none;
     border-radius: 0;

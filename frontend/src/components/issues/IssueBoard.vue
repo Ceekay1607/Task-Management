@@ -20,10 +20,8 @@
                     @selectedIssue="getIssue($event)"
                 />
             </div>
-            <div class="col-md-5">
-                <div v-if="selectedIssueDetail">
-                    <IssueDetail :issue="selectedIssueDetail" />
-                </div>
+            <div class="col-md-5" v-if="selectedIssueDetail">
+                <IssueDetail :issue="selectedIssueDetail" />
             </div>
         </div>
     </div>

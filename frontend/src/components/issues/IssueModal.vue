@@ -120,7 +120,7 @@ function onCreateIssue() {
         };
         const response = createIssue(issue);
         console.log(response);
-        route.go();
+        window.location.reload();
         return response;
     } catch (error) {
         console.log(error);
