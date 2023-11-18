@@ -91,7 +91,8 @@ function makeProjectsService() {
                 const isMember = await knex("projectuser")
                     .select("*")
                     .where("userId", member.id)
-                    .where("projectId", projectId);
+                    .where("projectId", projectId)
+                    .first();
                 // Add member to the ProjectUser table
                 if (!isMember) {
                     // Add member to the ProjectUser table
