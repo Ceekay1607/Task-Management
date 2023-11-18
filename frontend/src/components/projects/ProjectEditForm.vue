@@ -89,6 +89,7 @@ function onUpdateProject() {
         };
         const response = updateProject(updated);
         console.log(updated);
+        window.location.reload();
         return response;
     } catch (error) {
         console.log(error);
