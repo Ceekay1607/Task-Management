@@ -12,7 +12,7 @@
                         class="fa-solid fa-square-check me-1"
                         style="color: #39a7ff"
                     ></i>
-                    {{ issue.id }}
+                    {{ issue.number }}
                 </span>
                 <i
                     class="fa-solid fa-flag"

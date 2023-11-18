@@ -31,10 +31,18 @@ function makeIssueService() {
         return response;
     }
 
+    async function deleteIssue(issue) {
+        let url = `${baseUrl}/${issue.projectId}/issue/${issue.number}`;
+        return await fetch(url, {
+            method: "DELETE",
+        }).then((res) => res.json());
+    }
+
     return {
         getIssues,
         createIssue,
         updateIssue,
+        deleteIssue,
     };
 }
 

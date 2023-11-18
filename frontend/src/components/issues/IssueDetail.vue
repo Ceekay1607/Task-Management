@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form @submit.prevent="onUpdateIssue">
+        <form>
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="d-flex justify-content-between first-row">
@@ -13,14 +13,14 @@
                             ></label>
                             <span>{{ issue.number }}</span>
                         </div>
-                        <a href="#" @click="closeIssue"
-                            ><i class="fas fa-times"></i
+                        <a href="#" @click="onDeleteIssue"
+                            ><i class="fa-solid fa-trash"></i
                         ></a>
                     </div>
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-md-5">
+                <div class="col-md-7">
                     <div class="mb-3">
                         <input
                             type="text"
@@ -36,11 +36,11 @@
                             v-model="issue.description"
                         ></textarea>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 ms-2">
                         <span>Reporter: {{ issue.reporterName }}</span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-5">
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select
@@ -87,12 +87,16 @@
                             </option>
                         </select>
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary">
-                            Update <i class="fa-regular fa-pen-to-square"></i>
-                        </button>
-                    </div>
                 </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-lg"
+                    @click="onUpdateIssue"
+                >
+                    <span> Update</span>
+                </button>
             </div>
         </form>
     </div>
@@ -113,7 +117,7 @@ const props = defineProps({
     issue: { type: Object, required: true },
 });
 
-const { updateIssue } = useIssues();
+const { updateIssue, deleteIssue } = useIssues();
 
 const { retrieveProjectById } = useProjects();
 const { project } = retrieveProjectById(projectId);
@@ -148,9 +152,31 @@ function onUpdateIssue() {
         console.log(error);
     }
 }
+
+function onDeleteIssue() {
+    const message =
+        "Do you want to remove issue number " + props.issue.number + "?";
+    if (confirm(message)) {
+        const deleted = {
+            projectId: projectId.value,
+            number: props.issue.number,
+        };
+        const response = deleteIssue(deleted);
+        window.location.reload();
+    }
+}
 </script>
 
 <style scoped>
+textarea {
+    min-height: 2rem;
+}
+
+.first-row a i {
+    color: gray;
+    font-size: 0.5em;
+}
+
 .issue-input {
     border: none;
     border-radius: 0;
