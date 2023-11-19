@@ -19,8 +19,7 @@ export function useIssues() {
 
     const createIssueMutation = useMutation({
         mutationFn: issueService.createIssue,
-        onSuccess: (data) =>
-            queryClient.setQueriesData(["issues", "create"], data),
+        onSuccess: (data) => queryClient.setQueriesData(["issues"], data),
     });
 
     const updateIssueMutation = useMutation({

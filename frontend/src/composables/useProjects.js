@@ -45,9 +45,6 @@ export function useProjects() {
 
     const deleteProjectMutation = useMutation({
         mutationFn: projectsService.deleteProject,
-        // onSuccess: (data) => {
-        //     queryClient.setQueryData(["projects"], data);
-        // },
     });
 
     return {

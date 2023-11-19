@@ -17,6 +17,7 @@
                 v-for="project in projects"
                 :key="project.projectId"
                 :project="project"
+                :user="user"
                 @submit:delete="reload"
             />
             <!-- <h1 v-for="project in projects" :key="project.projectId">
@@ -24,35 +25,8 @@
             </h1> -->
         </div>
     </div>
-    <div
-        class="modal fade"
-        id="addProjectModal"
-        tabindex="-1"
-        aria-labelledby="addProjectModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1
-                        class="modal-title fs-2 fw-bold"
-                        id="addProjectModalLabel"
-                    >
-                        Project Information
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <ProjectAddForm @submit:add="reload" />
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <ProjectAddForm @submit:add="reload" />
 </template>
 
 <script setup>
