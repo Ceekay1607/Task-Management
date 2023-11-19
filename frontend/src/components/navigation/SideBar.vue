@@ -1,16 +1,22 @@
 <template>
     <div class="row flex-nowrap main-page">
         <aside id="sidebar" class="col-md-2 vh-100 bg-light">
-            <router-link to="/">
+            <router-link :to="{ name: 'project' }">
                 <div class="sidebar-logo">
-                    <a href="#" class="text-dark fs-3">Project</a>
+                    <h3 class="text-dark fs-3">Project</h3>
                 </div>
             </router-link>
 
             <ul class="nav flex-column nav-tabs">
                 <li class="nav-item">
                     <router-link
-                        :to="{ name: 'board' }"
+                        :to="{
+                            name: 'board',
+                            query: {
+                                issuesByCategory: issuesByCategory,
+                                categories: categories,
+                            },
+                        }"
                         class="nav-link text-dark fs-5"
                         active-class="router-link-active"
                     >
@@ -33,6 +39,22 @@
         <router-view class="col-md-10" />
     </div>
 </template>
+
+<script setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const props = defineProps({
+    project: { type: Object, required: true },
+    issuesByCategory: { type: Object, required: true },
+    categories: { type: Object, required: true },
+});
+
+const navigate = () => {
+    router.push({ name: "project" });
+};
+</script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");

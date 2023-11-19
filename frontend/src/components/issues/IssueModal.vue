@@ -30,7 +30,7 @@
                 v-model="assignee"
                 aria-label=".form-select-lg assignee"
             >
-                <option v-for="assignee in members">
+                <option v-for="assignee in project.members">
                     {{ assignee.memberEmail }}
                 </option>
             </select>
@@ -72,7 +72,7 @@
 
 <script setup>
 import { useUsers } from "@/composables/useUsers";
-import { useProjects } from "@/composables/useProjects";
+// import { useProjects } from "@/composables/useProjects";
 import { useIssues } from "@/composables/useIssues";
 import { useCategories } from "@/composables/useCategories";
 import { usePriorities } from "@/composables/usePriorities";
@@ -82,7 +82,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const projectId = computed(() => route.params.projectId);
 
-const { retrieveProjectById } = useProjects();
+// const { retrieveProjectById } = useProjects();
 const { retrieveCategories } = useCategories();
 const { retrievePriorities } = usePriorities();
 const { retrieveUser } = useUsers();
@@ -92,10 +92,16 @@ const { user } = retrieveUser();
 const infoUser = ref({ ...user.value });
 const reporterEmail = infoUser.value.email;
 
-const { project } = retrieveProjectById(projectId);
-const infoProject = ref({ ...project.value });
+// const { project } = retrieveProjectById(projectId);
+const props = defineProps({
+    project: { type: Object, required: true },
+});
 
-const members = infoProject.value.members;
+// console.log("project: " + props.project.value);
+
+// const infoProject = ref({ ...props.project.value });
+// const members = infoProject.value.members;
+
 const { categories } = retrieveCategories();
 const { priorities } = retrievePriorities();
 
@@ -122,7 +128,7 @@ function onCreateIssue() {
         createIssue(issue, { onSuccess: () => $emit("submit:addIssue", true) });
 
         // console.log(response);
-        window.location.reload();
+        // window.location.reload();
         // return response;
     } catch (error) {
         console.log(error);

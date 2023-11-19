@@ -9,7 +9,6 @@
                         class="btn d-block mt-5"
                         data-bs-toggle="modal"
                         data-bs-target="#addIssueModal"
-                        @submit:addIssue="reload"
                     >
                         <i class="fa-solid fa-plus me-2"></i>New
                     </button>
@@ -30,8 +29,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useCategories } from "@/composables/useCategories";
-import { useIssues } from "@/composables/useIssues";
+// import { useCategories } from "@/composables/useCategories";
+// import { useIssues } from "@/composables/useIssues";
 import IssueLists from "@/components/issues/IssueLists.vue";
 import IssueDetail from "./IssueDetail.vue";
 import InputSearch from "../common/InputSearch.vue";
@@ -40,25 +39,34 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const projectId = ref(route.params.projectId);
 
-const { retrieveCategories } = useCategories();
-const { retrieveIssues } = useIssues();
+// const { retrieveCategories } = useCategories();
+// const { retrieveIssues } = useIssues();
 
-const { categories } = retrieveCategories();
-const { issues, refetch } = retrieveIssues(projectId);
-const searchText = ref("");
+// const { categories } = retrieveCategories();
+// const { issues, refetch } = retrieveIssues(projectId);
+// const searchText = ref("");
 
-async function reload(isReload) {
-    if (isReload) {
-        await refetch();
-    }
-}
+// const issuesByCategory = computed(() => {
+//     if (categories.value && issues.value) {
+//         return categorizeIssues(issues.value, categories.value);
+//     } else {
+//         return {};
+//     }
+// });
 
-const issuesByCategory = computed(() => {
-    if (categories.value && issues.value) {
-        return categorizeIssues(issues.value, categories.value);
-    } else {
-        return {};
-    }
+//issue
+
+const issuesByCategory = ref(null);
+const categories = ref(null);
+
+onMounted(() => {
+    // Lấy giá trị từ query parameters
+    const queryParams = window.location.search;
+    const urlParams = new URLSearchParams(queryParams);
+    issuesByCategory.value = urlParams.get("issuesByCategory");
+    categories.value = urlParams.get("categories");
+    // Nếu issuesByCategory là một JSON stringified object, bạn có thể chuyển nó về đối tượng
+    // issuesByCategory.value = JSON.parse(urlParams.get('issuesByCategory'));
 });
 
 const categorizeIssues = (issues, categories) => {

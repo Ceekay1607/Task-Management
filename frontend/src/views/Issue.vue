@@ -3,10 +3,11 @@
         <AppHeader :user="user" />
         <div class="container-fluid">
             <div class="row">
-                <SideBar />
-                <div class="col-md-10 main-page">
-                    <router-view />
-                </div>
+                <SideBar
+                    :project="project"
+                    :issuesByCategory="issuesByCategory"
+                    :categories="categories"
+                />
             </div>
         </div>
     </div>
@@ -33,7 +34,7 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <IssueModal />
+                    <IssueModal @submit:addIssue="reload" :project="project" />
                 </div>
             </div>
         </div>
@@ -52,7 +53,50 @@ const route = useRoute();
 const projectId = computed(() => route.params.projectId);
 const { retrieveUser } = useUsers();
 
+//project
+import { useProjects } from "@/composables/useProjects";
+const { retrieveProjectById } = useProjects();
+const { project } = retrieveProjectById(projectId);
+
+//category
+import { useCategories } from "@/composables/useCategories";
+
+const { retrieveCategories } = useCategories();
+const { categories } = retrieveCategories();
+
+//issue
+import { useIssues } from "@/composables/useIssues";
+const { retrieveIssues } = useIssues();
+const { issues, refetch } = retrieveIssues(projectId);
+
+const issuesByCategory = computed(() => {
+    if (categories.value && issues.value) {
+        return categorizeIssues(issues.value, categories.value);
+    } else {
+        return {};
+    }
+});
+
+const categorizeIssues = (issues, categories) => {
+    const categorized = {};
+    categories.forEach((category) => {
+        const categoryName = category.name;
+        categorized[categoryName] = issues.filter(
+            (issue) => issue.categoryName === categoryName
+        );
+    });
+    return categorized;
+};
+
 const { user } = retrieveUser();
+
+const $emit = defineEmits(["submit:addIssue"]);
+
+async function reload(isReload) {
+    if (isReload) {
+        window.location.reload();
+    }
+}
 </script>
 
 <style>
