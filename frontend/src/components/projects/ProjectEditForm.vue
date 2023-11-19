@@ -54,20 +54,17 @@
 import { useProjects } from "@/composables/useProjects";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
-import { watch } from "vue";
 
 const route = useRoute();
 const projectId = computed(() => route.params.projectId);
 
 const { retrieveProjectById, updateProject } = useProjects();
 
-const { project, refetch } = retrieveProjectById(projectId);
-
-// watch(project, async () => {
-//     await refetch();
-// });
+const { project } = retrieveProjectById(projectId);
 
 const editProject = ref({ ...project.value });
+const email = ref("");
+const loading = ref(false);
 
 function convertToEmailArray(input) {
     if (input.includes(",")) {
@@ -81,7 +78,7 @@ function convertToEmailArray(input) {
 
 function onUpdateProject() {
     try {
-        // loading.value = true;
+        loading.value = true;
         const updated = {
             id: projectId.value,
             name: editProject.value.name,
@@ -90,7 +87,7 @@ function onUpdateProject() {
         };
         const response = updateProject(updated);
         console.log(updated);
-        // window.location.reload();
+        window.location.reload();
         return response;
     } catch (error) {
         console.log(error);
