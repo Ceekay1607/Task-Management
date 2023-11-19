@@ -68,7 +68,6 @@ div {
     margin-top: 75px;
 }
 
-/* Ensure that the modal backdrop covers the whole page */
 .modal-backdrop {
     position: fixed;
     z-index: 1050;
@@ -76,6 +75,6 @@ div {
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: #000; /* or your desired color */
+    background-color: #000;
 }
 </style>

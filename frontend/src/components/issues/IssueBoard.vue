@@ -9,6 +9,7 @@
                         class="btn d-block mt-5"
                         data-bs-toggle="modal"
                         data-bs-target="#addIssueModal"
+                        @submit:addIssue="reload"
                     >
                         <i class="fa-solid fa-plus me-2"></i>New
                     </button>
@@ -43,8 +44,14 @@ const { retrieveCategories } = useCategories();
 const { retrieveIssues } = useIssues();
 
 const { categories } = retrieveCategories();
-const { issues } = retrieveIssues(projectId);
+const { issues, refetch } = retrieveIssues(projectId);
 const searchText = ref("");
+
+async function reload(isReload) {
+    if (isReload) {
+        await refetch();
+    }
+}
 
 const issuesByCategory = computed(() => {
     if (categories.value && issues.value) {

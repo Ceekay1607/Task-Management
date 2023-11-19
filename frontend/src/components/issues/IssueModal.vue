@@ -99,16 +99,16 @@ const members = infoProject.value.members;
 const { categories } = retrieveCategories();
 const { priorities } = retrievePriorities();
 
-const loading = ref(false);
 const name = ref("");
 const description = ref("");
 const assignee = ref("");
 const category = ref("");
 const priority = ref("");
 
+const $emit = defineEmits(["submit:addIssue"]);
+
 function onCreateIssue() {
     try {
-        loading.value = true;
         const issue = {
             projectId: projectId.value,
             name: name.value,
@@ -118,14 +118,14 @@ function onCreateIssue() {
             category: category.value,
             priority: priority.value,
         };
-        const response = createIssue(issue);
-        console.log(response);
+        // const response = createIssue(issue);
+        createIssue(issue, { onSuccess: () => $emit("submit:addIssue", true) });
+
+        // console.log(response);
         window.location.reload();
-        return response;
+        // return response;
     } catch (error) {
         console.log(error);
-    } finally {
-        loading.value = false;
     }
 }
 </script>

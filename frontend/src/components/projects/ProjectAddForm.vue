@@ -44,6 +44,8 @@
 import { useProjects } from "@/composables/useProjects";
 import { ref } from "vue";
 
+const $emit = defineEmits(["submit:add"]);
+
 const { createProject } = useProjects();
 
 const name = ref("");
@@ -69,8 +71,12 @@ function onCreateProject() {
             description: description.value,
             memberEmails: convertToEmailArray(email.value),
         };
-        const response = createProject(newProject);
-        window.location.reload();
+        const response = createProject(newProject, {
+            onSuccess: () => {
+                $emit("submit:add", true);
+            },
+        });
+        // window.location.reload();
     } catch (error) {
         console.log(error);
     } finally {
