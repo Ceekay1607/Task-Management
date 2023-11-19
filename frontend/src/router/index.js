@@ -38,6 +38,7 @@ const routes = [
                     import("../components/projects/ProjectEditForm.vue"),
             },
         ],
+        meta: { requiresAuth: true },
         props: (route) => ({ projectId: route.params.projectId }),
     },
 
