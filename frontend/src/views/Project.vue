@@ -17,6 +17,7 @@
                 v-for="project in projects"
                 :key="project.id"
                 :project="project"
+                :user="user"
             />
         </div>
     </div>
@@ -92,8 +93,8 @@ header {
 }
 
 .scroll {
-    max-height: 75vh;
+    max-height: 70vh;
     position: relative;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 </style>

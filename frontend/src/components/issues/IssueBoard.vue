@@ -1,7 +1,7 @@
 <template>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-7">
+    <div class="mt-4 col-xs-12">
+        <div class="row board">
+            <div class="col-md-7 col-sm-12">
                 <div class="mb-2">
                     <InputSearch v-model="searchText" />
                     <button
@@ -85,5 +85,11 @@ function getIssue(issue) {
 
 .btn:hover {
     background-color: #89cff3;
+}
+
+.board {
+    overflow-y: auto;
+
+    max-height: 85vh;
 }
 </style>

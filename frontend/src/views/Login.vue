@@ -53,12 +53,21 @@
                         </div>
 
                         <div class="text-center text-lg-start mt-4 pt-2">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-lg"
-                            >
-                                Login
-                            </button>
+                            <div style="display: inline">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-lg"
+                                >
+                                    Login
+                                </button>
+                                <p
+                                    class="small fw-bold link-danger"
+                                    style="display: inline; margin-left: 20px"
+                                >
+                                    {{ message }}
+                                </p>
+                            </div>
+
                             <p class="small fw-bold mt-2 pt-1 mb-0">
                                 Don't have an account?
                                 <router-link to="/register" class="link-danger"
@@ -73,39 +82,34 @@
     </section>
 </template>
 
-<script>
-import loginService from "@/service/auth.service";
+<script setup>
+import authService from "@/service/auth.service";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-    data() {
-        return {
-            email: "",
-            password: "",
-            loading: false,
-        };
-    },
-    methods: {
-        async login() {
-            try {
-                this.loading = true;
-                const response = await loginService.login(
-                    this.email,
-                    this.password
-                );
+const route = useRouter();
 
-                this.$router.push({ name: "project" });
-            } catch (error) {
-                // Handle errors, display messages, etc.
-                console.error(
-                    "Login failed:",
-                    error.response ? error.response.data : error.message
-                );
-            } finally {
-                this.loading = false;
-            }
-        },
-    },
-};
+const email = ref("");
+const password = ref("");
+const loading = ref(false);
+const message = ref("");
+
+async function login() {
+    try {
+        loading.value = true;
+        const response = await authService.login(email.value, password.value);
+        message.value = "";
+        route.push({ name: "project" });
+    } catch (error) {
+        message.value = "Wrong username or password";
+        console.error(
+            "Login failed:",
+            error.response ? error.response.data : error.message
+        );
+    } finally {
+        loading.value = false;
+    }
+}
 </script>
 
 <style scoped>

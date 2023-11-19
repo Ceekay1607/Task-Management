@@ -5,6 +5,7 @@
             :to="{
                 name: 'issues',
                 params: { projectId: project.projectId },
+                query: { users: user },
             }"
         >
             <div class="card dark">
@@ -30,6 +31,8 @@
             <i class="fa-solid fa-trash"></i> Delete
         </button>
     </div>
+
+    <router-view />
 </template>
 
 <script setup>
@@ -38,15 +41,15 @@ import { useProjects } from "@/composables/useProjects";
 
 const { deleteProject } = useProjects();
 
-const { project } = defineProps({
+const { project, user } = defineProps({
     project: { type: Object, required: true },
+    user: { type: Object, required: true },
 });
 
 const onDeleteProject = () => {
     const message = "Do you want to remove " + project.projectName + "?";
     if (confirm(message)) {
         const response = deleteProject(project.projectId);
-        window.location.reload();
     }
 };
 </script>

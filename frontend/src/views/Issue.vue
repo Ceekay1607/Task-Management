@@ -1,12 +1,9 @@
 <template>
     <div class="main fixed-top container-fluid">
-        <AppHeader :user="user" />
+        <AppHeader :user="users" />
         <div class="container-fluid">
             <div class="row">
                 <SideBar />
-                <div class="col-md-10 main-page">
-                    <router-view />
-                </div>
             </div>
         </div>
     </div>
@@ -47,6 +44,10 @@ import IssueModal from "@/components/issues/IssueModal.vue";
 import { useUsers } from "@/composables/useUsers";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
+
+const { users } = defineProps({
+    users: { type: Object, require: true },
+});
 
 const route = useRoute();
 const projectId = computed(() => route.params.projectId);

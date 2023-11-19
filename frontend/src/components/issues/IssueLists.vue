@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row row-cols-3">
         <IssueList
             v-for="category in categories"
             :key="category.id"

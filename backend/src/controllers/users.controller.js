@@ -19,10 +19,7 @@ async function createUser(req, res, next) {
 
         const usersService = makeUsersService();
 
-        // Step 1: Create user
         const user = await usersService.createUser(req.body);
-
-        // Step 2: Create user account
 
         const userAccount = await userAccountService.createUserAccount({
             userId: user.id,
@@ -30,7 +27,6 @@ async function createUser(req, res, next) {
             password: req.body.password,
         });
 
-        // Optionally, you can return both user and user account in the response
         return res.send({ user, userAccount });
     } catch (error) {
         console.error(error);

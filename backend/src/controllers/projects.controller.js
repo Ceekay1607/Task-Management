@@ -1,7 +1,6 @@
 const makeProjectsService = require("../services/projects.service");
 const ApiError = require("../api-error");
 
-// controllers/project.controller.js
 async function createProject(req, res, next) {
     const { name, description, image, memberEmails } = req.body;
 
@@ -53,7 +52,6 @@ async function retrieveProject(req, res, next) {
 
 async function retrieveAllProjects(req, res, next) {
     try {
-        // Take userId in current session
         const userId = req.user.id;
 
         const projectsService = makeProjectsService();

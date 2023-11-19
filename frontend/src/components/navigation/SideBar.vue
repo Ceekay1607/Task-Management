@@ -1,6 +1,6 @@
 <template>
     <div class="row flex-nowrap main-page">
-        <aside id="sidebar" class="col-md-2 vh-100 bg-light">
+        <aside id="sidebar" class="col-xs-2 col-md-3 col-lg-2 vh-100 bg-light">
             <router-link to="/">
                 <div class="sidebar-logo">
                     <a href="#" class="text-dark fs-3">Project</a>
@@ -11,7 +11,7 @@
                 <li class="nav-item">
                     <router-link
                         :to="{ name: 'board' }"
-                        class="nav-link text-dark fs-5"
+                        class="nav-link text-dark fs-6"
                         active-class="router-link-active"
                     >
                         <i class="fa-solid fa-table-columns margin-right"></i>
@@ -21,7 +21,7 @@
                 <li class="nav-item">
                     <router-link
                         :to="{ name: 'editProject' }"
-                        class="nav-link text-dark fs-5"
+                        class="nav-link text-dark fs-6"
                         active-class="router-link-active"
                     >
                         <i class="fa-solid fa-sliders margin-right"></i>
@@ -30,7 +30,7 @@
                 </li>
             </ul>
         </aside>
-        <router-view class="col-md-10" />
+        <router-view class="col-md-9 col-lg-10" />
     </div>
 </template>
 
@@ -53,7 +53,6 @@ li {
 }
 
 #sidebar {
-    width: 260px;
     margin-left: -10px;
     box-shadow: 5px 0 5px -5px gray;
 }
