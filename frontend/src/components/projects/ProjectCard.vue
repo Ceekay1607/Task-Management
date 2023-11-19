@@ -1,30 +1,30 @@
 <template>
     <div class="col-12 col-md-6 col-lg-4">
-        <router-link
+        <!-- <router-link
             style="text-decoration: none; color: inherit"
             :to="{
                 name: 'issues',
                 params: { projectId: project.projectId },
             }"
-        >
-            <div class="card dark">
-                <img
-                    :src="project.projectImage || '/images/default-project.png'"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <div class="text-section">
-                        <h5 class="card-title fw-bold">
-                            {{ project.projectName }}
-                        </h5>
-                        <p class="card-text">
-                            {{ project.projectDescription }}
-                        </p>
-                    </div>
+        > -->
+        <div class="card dark" @click="navigate(project.projectId)">
+            <img
+                :src="project.projectImage || '/images/default-project.png'"
+                class="card-img-top"
+                alt="..."
+            />
+            <div class="card-body">
+                <div class="text-section">
+                    <h5 class="card-title fw-bold">
+                        {{ project.projectName }}
+                    </h5>
+                    <p class="card-text">
+                        {{ project.projectDescription }}
+                    </p>
                 </div>
             </div>
-        </router-link>
+        </div>
+        <!-- </router-link> -->
 
         <button class="btn btn-danger mb-4 my-1" @click="onDeleteProject">
             <i class="fa-solid fa-trash"></i> Delete
@@ -35,18 +35,29 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useProjects } from "@/composables/useProjects";
-
+import { useRouter } from "vue-router";
 const { deleteProject } = useProjects();
+
+const router = useRouter();
+const navigate = (projectId) => {
+    router.push({ name: "issues", params: { projectId: projectId } });
+};
 
 const { project } = defineProps({
     project: { type: Object, required: true },
 });
 
+const $emit = defineEmits(["submit:delete"]);
+
 const onDeleteProject = () => {
     const message = "Do you want to remove " + project.projectName + "?";
     if (confirm(message)) {
-        const response = deleteProject(project.projectId);
-        window.location.reload();
+        deleteProject(project.projectId, {
+            onSuccess: () => {
+                $emit("submit:delete", true);
+            },
+        });
+        // window.location.reload();
     }
 };
 </script>
