@@ -6,26 +6,21 @@ export function useIssues() {
     const queryClient = useQueryClient();
 
     function retrieveIssues(projectId) {
-        const { data: issuesArray } = useQuery({
+        const { data: issues, refetch } = useQuery({
             queryKey: ["issues", projectId],
             queryFn: () => issueService.getIssues(projectId),
         });
 
-        const issues = computed(() => {
-            const tempIssues =
-                issuesArray.value?.map((issue) => ({ ...issue })) ?? [];
-            return tempIssues;
-        });
-
         return {
             issues,
+            refetch,
         };
     }
 
     const createIssueMutation = useMutation({
         mutationFn: issueService.createIssue,
         onSuccess: (data) =>
-            queryClient.setQueriesData(["issue", "create"], data),
+            queryClient.setQueriesData(["issues", "create"], data),
     });
 
     const updateIssueMutation = useMutation({

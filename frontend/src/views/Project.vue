@@ -12,44 +12,21 @@
         >
             <i class="fa-solid fa-plus"></i> New
         </button>
-        <div class="row scroll pt-3 ps-2">
+        <div class="row scroll pt-3 ps-2" v-if="projects">
             <ProjectCard
                 v-for="project in projects"
-                :key="project.id"
+                :key="project.projectId"
                 :project="project"
                 :user="user"
+                @submit:delete="reload"
             />
+            <!-- <h1 v-for="project in projects" :key="project.projectId">
+                {{ project }}
+            </h1> -->
         </div>
     </div>
-    <div
-        class="modal fade"
-        id="addProjectModal"
-        tabindex="-1"
-        aria-labelledby="addProjectModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1
-                        class="modal-title fs-2 fw-bold"
-                        id="addProjectModalLabel"
-                    >
-                        Project Information
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <ProjectAddForm />
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <ProjectAddForm @submit:add="reload" />
 </template>
 
 <script setup>
@@ -64,7 +41,13 @@ const { retrieveUser } = useUsers();
 const { user } = retrieveUser();
 
 const { retrieveProjectsQuery } = useProjects();
-const { projects } = retrieveProjectsQuery();
+const { projects, refetch } = retrieveProjectsQuery();
+
+async function reload(isReload) {
+    if (isReload) {
+        await refetch();
+    }
+}
 // console.log(projects.value);
 </script>
 

@@ -23,7 +23,7 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <form @submit.prevent="onCreateProject">
+                    <form @submit.stop.prevent="onCreateProject">
                         <div class="form-outline mb-3">
                             <label class="form-label" for="name">Name</label>
                             <input
@@ -84,6 +84,8 @@
 import { useProjects } from "@/composables/useProjects";
 import { ref } from "vue";
 
+const $emit = defineEmits(["submit:add"]);
+
 const { createProject } = useProjects();
 
 const name = ref("");
@@ -109,7 +111,12 @@ function onCreateProject() {
             description: description.value,
             memberEmails: convertToEmailArray(email.value),
         };
-        const response = createProject(newProject);
+        const response = createProject(newProject, {
+            onSuccess: () => {
+                $emit("submit:add", true);
+            },
+        });
+        // window.location.reload();
     } catch (error) {
         console.log(error);
     } finally {
